@@ -17,7 +17,7 @@ angular.module('stvApp')
     ];
 
 
-	$scope.candidatesArray = [{firstname:'sdgds', lastname:'lastafdg'}, {firstname:'sdg', lastname:'lastagdfs'}];
-    $scope.election = new Election($scope.candidatesArray);
+	$scope.tmpCandidatesArray = [{firstname:'fna', lastname:'lna'}, {firstname:'fnb', lastname:'lnb'}];
+    $scope.election = new Election($scope.tmpCandidatesArray);
 
   });

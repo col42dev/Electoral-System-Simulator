@@ -11,7 +11,9 @@
 angular
   .module('stvApp', [
     'ngAnimate',
+    'ngAria',
     'ngCookies',
+    'ngMessages',
     'ngResource',
     'ngRoute',
     'ngSanitize',
@@ -26,6 +28,10 @@ angular
       .when('/about', {
         templateUrl: 'views/about.html',
         controller: 'AboutCtrl'
+      })
+      .when('/elect', {
+        templateUrl: 'views/elect.html',
+        controller: 'ElectCtrl'
       })
       .otherwise({
         redirectTo: '/'
