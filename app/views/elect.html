@@ -1,0 +1,13 @@
+<p>This is the elect view.</p>
+
+
+
+	<div ng-repeat="item in election.candidatesArray">
+		<label> Input {{$index+1}}:</label>
+		<input ng-model="item.firstName" type="text">
+	</div>
+
+	
+
+	</br>
+	<p>election.candidatesArray {{ election.candidatesArray }} </p>
