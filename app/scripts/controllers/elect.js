@@ -18,6 +18,11 @@ angular.module('stvApp')
 
 
 	var tmpCandidatesArray = [{firstname:'fna', lastname:'lna'}, {firstname:'fnb', lastname:'lnb'}];
+    
     $scope.election = new Election(tmpCandidatesArray);
+
+   	console.log( '>' + JSON.stringify($scope.election) );
+
+   	$scope.election.placeVote();
 
   });
