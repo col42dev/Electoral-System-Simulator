@@ -16,16 +16,16 @@ angular.module('stvApp')
       this.candidatesArray = [];
 
       angular.forEach(candidates, (function(thisCandidate) {
-        this.candidatesArray.push(new Candidate(thisCandidate.firstname, thisCandidate.lastname));
+        this.candidatesArray.push(new Candidate(thisCandidate));
        }).bind(this)); 
     };
 
-    this.placeVote = function() {
+    this.placeVote = function(candidateObject) {
       console.log('Election Factory create Vote');
 
       this.voteArray = [];
 
-      this.voteArray.push( new Vote());
+      this.voteArray.push( new Vote(candidateObject));
 
     };
 

@@ -1,7 +1,7 @@
 <p>This is the elect view.</p>
 
 
-
+	<p>candidates</p>
 	<div ng-repeat="item in election.candidatesArray">
 		<label> Input {{$index+1}}:</label>
 		<input ng-model="item.firstName" type="text">
@@ -11,3 +11,11 @@
 
 	</br>
 	<p>election.candidatesArray {{ election.candidatesArray }} </p>
+	
+	</br>
+	<p>votes</p>
+	<div ng-repeat="item in election.voteArray">
+		<label> Input {{$index+1}}:</label>
+		<input ng-model="item.candidateKey" type="text">
+	</div>
+

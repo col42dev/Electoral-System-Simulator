@@ -6,10 +6,11 @@ angular.module('stvApp')
   /**
    * Constructor, with class name
    */
-  function Candidate(firstName, lastName) {
+  function Candidate(candidateObj) {
     // Public properties, assigned to the instance ('this')
-    this.firstName = firstName;
-    this.lastName = lastName;
+    this.key = candidateObj.key;
+    this.firstName = candidateObj.firstName;
+    this.lastName = candidateObj.lastName;
   }
  
   /**
