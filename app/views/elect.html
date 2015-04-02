@@ -13,9 +13,19 @@
 	<p>election.candidatesArray {{ election.candidatesArray }} </p>
 	
 	</br>
+	<div>
+		<label> Input VoteCount:</label>
+		<input ng-model="election.voteCount" type="text" ng-change="voteCountChange()">
+	</div>
+
+
+	</br>
 	<p>votes</p>
 	<div ng-repeat="item in election.voteArray">
 		<label> Input {{$index+1}}:</label>
 		<input ng-model="item.candidateKey" type="text">
 	</div>
+
+	</br>
+	<p>results</p>
 
