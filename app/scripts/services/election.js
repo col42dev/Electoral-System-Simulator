@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('stvApp')
-.factory('Election', function (Candidate, Vote) {
+.factory('Election', function (Candidate, Vote, VotingRound) {
 
 
   /**
@@ -34,31 +34,36 @@ angular.module('stvApp')
         thisCandidate.resetVotes();
        }).bind(this)); 
 
-      this.resultResolutionRounds = [];
+     
 
       // Generate Votes
       this.voteArray = [];
       var voteIndex = 0;
-      for (; voteIndex < this.voteCount; voteIndex ++) {
+      for (; voteIndex < this.voteCount; voteIndex++ ) {
         var randomCandidateIndex = Math.floor(Math.random() * this.candidatesArray.length);
         this.placeVote( this.candidatesArray[randomCandidateIndex] );
       }
 
-      //Calc Droop quota
-      this.updateDroopQuota();
-
       // results resolution
-      while ( !this.voteResolutionConditionsMet()) {
+      this.voteResolutionRounds = [];
+      while ( !this.voteResolutionConditionsMet( this.calcDroopQuota( ))) {
 
       }
 
     };
 
-    this.voteResolutionConditionsMet = function () {
-      this.resultResolutionRounds.push( {});
-      return 1; // calc against droop quota for this rounds. droop quota needs to be stored for each round.
-      // create a vote resolutions round factory for reolving each round.
+    this.voteResolutionConditionsMet = function ( roundDroopQuota) {
+      this.voteResolutionRounds.push( new VotingRound( roundDroopQuota));
 
+      angular.forEach(this.candidatesArray, ( function(thisCandidate) {
+        if ( thisCandidate.getVoteCount() > roundDroopQuota) {
+          return 1;
+        }
+       }).bind(this)); 
+
+        // remove the canidate with teh fewest votes and transfer their votes.
+
+      return 1; // todo: return 0 when round end update is implemented.
     };
 
     this.placeVote = function(candidateObject) {
@@ -66,8 +71,12 @@ angular.module('stvApp')
       candidateObject.voteCount += 1;
     };
 
-    this.updateDroopQuota = function() {
-      this.droopQuota = Math.floor((this.voteCount / (this.seatsToFill + 1)) + 1);
+    this.calcDroopQuota = function() {
+      return  Math.floor((this.voteCount / (this.seatsToFill + 1)) + 1);
+    };
+
+    this.getDroopQuota = function( votingRoundIndex) {
+      return this.voteResolutionRounds[votingRoundIndex].droopQuota;
     };
 
 
