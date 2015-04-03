@@ -28,21 +28,31 @@ angular.module('stvApp')
     };
 
     this.placeVotes  = function() {
-
-      // Reset Candidate votes
-      angular.forEach(this.candidatesArray, ( function(thisCandidate) {
-        thisCandidate.resetVotes();
-       }).bind(this)); 
-
      
 
       // Generate Votes
-      this.voteArray = [];
+      this.votePrefFirst = {};
+      this.votePrefSecond = {};
+      angular.forEach(candidates, ( function(thisCandidate) {
+        this.votePrefFirst[thisCandidate.key] = 0;
+        this.votePrefSecond[thisCandidate.key] = 0;
+       }).bind(this)); 
+
       var voteIndex = 0;
       for (; voteIndex < this.voteCount; voteIndex++ ) {
-        var randomCandidateIndex = Math.floor(Math.random() * this.candidatesArray.length);
-        this.placeVote( this.candidatesArray[randomCandidateIndex] );
+        var firstPreferenceCandidateIndex = Math.floor(Math.random() * this.candidatesArray.length);
+        var secondPreferenceCandidateIndex = Math.floor(Math.random() * this.candidatesArray.length);
+
+        this.votePrefFirst[ this.candidatesArray[firstPreferenceCandidateIndex].key ] += 1;
+        this.votePrefSecond[ this.candidatesArray[secondPreferenceCandidateIndex].key ] += 1;
       }
+
+      //log results
+      angular.forEach(candidates, ( function(thisCandidate) {
+        console.log( thisCandidate.key + ' first ' + this.votePrefFirst[thisCandidate.key]);
+        console.log( thisCandidate.key + ' seconds ' + this.votePrefSecond[thisCandidate.key]);
+   
+       }).bind(this)); 
 
       // results resolution
       this.voteResolutionRounds = [];
@@ -52,23 +62,21 @@ angular.module('stvApp')
 
     };
 
+
     this.voteResolutionConditionsMet = function ( roundDroopQuota) {
       this.voteResolutionRounds.push( new VotingRound( roundDroopQuota));
 
+/*
       angular.forEach(this.candidatesArray, ( function(thisCandidate) {
         if ( thisCandidate.getVoteCount() > roundDroopQuota) {
           return 1;
         }
        }).bind(this)); 
+*/
 
-        // remove the canidate with teh fewest votes and transfer their votes.
+        // remove the canidate with the fewest votes and transfer their votes.
 
       return 1; // todo: return 0 when round end update is implemented.
-    };
-
-    this.placeVote = function(candidateObject) {
-      this.voteArray.push( new Vote(candidateObject) );
-      candidateObject.voteCount += 1;
     };
 
     this.calcDroopQuota = function() {

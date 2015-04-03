@@ -11,15 +11,15 @@ angular.module('stvApp')
   .factory('Vote', function () {
 
 
-    var Vote = function(candidateObject) {
+    var Vote = function(orderedCandidatePreferenceArray) {
         // Public properties, assigned to the instance ('this')
 
-        this.initialize = function(candidateObject) {
-          this.candidateKey = candidateObject.key;
+        this.initialize = function(orderedCandidatePreferenceArray) {
+          this.preferences = orderedCandidatePreferenceArray;  
         };
 
         // Call the initialize function for every new instance
-        this.initialize(candidateObject);
+        this.initialize(orderedCandidatePreferenceArray);
     };
 
 

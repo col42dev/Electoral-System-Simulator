@@ -12,7 +12,6 @@ angular.module('stvApp')
     this.firstName = candidateObj.firstName;
     this.lastName = candidateObj.lastName;
 
-    this.resetVotes();
   }
  
   /**
@@ -22,13 +21,6 @@ angular.module('stvApp')
     return this.firstName + ' ' + this.lastName;
   };
 
-  Candidate.prototype.resetVotes = function () {
-    this.voteCount = 0;
-  };
- 
-  Candidate.prototype.getVoteCount = function () {
-    return this.voteCount;
-  };
 
  
   /**

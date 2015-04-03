@@ -18,20 +18,11 @@
 		<input ng-model="election.voteCount" type="text" ng-change="voteCountChange()">
 	</div>
 
-
 	</br>
-	<p>votes</p>
-	<div ng-repeat="item in election.voteArray">
-		<label> Input {{$index+1}}:</label>
-		<input ng-model="item.candidateKey" type="text">
+	<p>VOTES</p>
+	<div ng-repeat="item in election.candidatesArray">
+		<label> Input {{$index+1}} {{item.firstName}}:</label>
+		{{election.votePrefFirst[item.key]}} {{election.votePrefSecond[item.key]}}
 	</div>
 
-	</br>
-	<p>RESULTS</p>
-	<div ng-repeat="item in election.voteResolutionRounds">
-		<p> Round {{$index+1}} : Droop Quota: {{ election.getDroopQuota($index) }}</p>
-		<div ng-repeat="item in election.candidatesArray">
-			<label> 	Candidate {{item.firstName}}:</label>
-			<input ng-model="item.voteCount" type="text">
-		</div>
-	</div>
+
