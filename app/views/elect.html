@@ -20,9 +20,11 @@
 
 	</br>
 	<p>VOTES</p>
-	<div ng-repeat="item in election.candidatesArray">
-		<label> Input {{$index+1}} {{item.firstName}}:</label>
-		{{election.votePrefFirst[item.key]}} {{election.votePrefSecond[item.key]}}
+	<div ng-repeat="candidate in election.candidatesArray">
+		<label> Input {{$index+1}} {{candidate.firstName}}:</label> 
+		<div style="display: inline" ng-repeat="votePrefIndex in election.candidatesArray"> 
+			<label>{{election.votePref[$index][candidate.key]}} </label>
+		</div>
 	</div>
 
 

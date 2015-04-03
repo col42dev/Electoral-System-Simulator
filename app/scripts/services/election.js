@@ -30,29 +30,28 @@ angular.module('stvApp')
     this.placeVotes  = function() {
      
 
-      // Generate Votes
-      this.votePrefFirst = {};
-      this.votePrefSecond = {};
+      // Reset votes
+
+      //initilaize vote pref data store
+      this.votePref = []; // index 0: vote pref; index 1: hash map of key of candidate; value: tally of votes for combination of vote pref and candidate.
+      angular.forEach(candidates, ( function() {
+          this.votePref.push( {} );
+        }).bind(this)); 
+      
       angular.forEach(candidates, ( function(thisCandidate) {
-        this.votePrefFirst[thisCandidate.key] = 0;
-        this.votePrefSecond[thisCandidate.key] = 0;
+        for ( var votePreferenceIndex=0; votePreferenceIndex < this.candidatesArray.length; votePreferenceIndex++) {
+          this.votePref[votePreferenceIndex][thisCandidate.key] = 0;
+        }
        }).bind(this)); 
 
-      var voteIndex = 0;
-      for (; voteIndex < this.voteCount; voteIndex++ ) {
-        var firstPreferenceCandidateIndex = Math.floor(Math.random() * this.candidatesArray.length);
-        var secondPreferenceCandidateIndex = Math.floor(Math.random() * this.candidatesArray.length);
-
-        this.votePrefFirst[ this.candidatesArray[firstPreferenceCandidateIndex].key ] += 1;
-        this.votePrefSecond[ this.candidatesArray[secondPreferenceCandidateIndex].key ] += 1;
+      // Generate votes
+      for (var voteIndex = 0; voteIndex < this.voteCount; voteIndex++ ) {
+        for ( var votePreferenceIndex=0; votePreferenceIndex < this.candidatesArray.length; votePreferenceIndex++) {
+            var randomCandidateIndex = Math.floor(Math.random() * this.candidatesArray.length);
+            var candidateKey = this.candidatesArray[randomCandidateIndex].key ;
+            this.votePref[ votePreferenceIndex ][ candidateKey ] += 1;
+        }
       }
-
-      //log results
-      angular.forEach(candidates, ( function(thisCandidate) {
-        console.log( thisCandidate.key + ' first ' + this.votePrefFirst[thisCandidate.key]);
-        console.log( thisCandidate.key + ' seconds ' + this.votePrefSecond[thisCandidate.key]);
-   
-       }).bind(this)); 
 
       // results resolution
       this.voteResolutionRounds = [];
