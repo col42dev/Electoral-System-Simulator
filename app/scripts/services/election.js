@@ -19,7 +19,9 @@ angular.module('stvApp')
         this.candidatesArray.push(new Candidate(thisCandidate));
        }).bind(this)); 
 
-      this.voteCount = 12;
+      this.voteCount = 0; 
+      this.seatsToFill = 1;
+      this.droopQuota = 0;
 
       // place votes
       this.placeVotes();
@@ -40,11 +42,18 @@ angular.module('stvApp')
         this.placeVote( this.candidatesArray[randomCandidateIndex] );
       }
 
+      //Calc Droop quota
+      this.updateDroopQuota();
+
     };
 
     this.placeVote = function(candidateObject) {
       this.voteArray.push( new Vote(candidateObject) );
       candidateObject.voteCount += 1;
+    };
+
+    this.updateDroopQuota = function() {
+      this.droopQuota = (this.voteCount / (this.seatsToFill + 1)) + 1;
     };
 
 
