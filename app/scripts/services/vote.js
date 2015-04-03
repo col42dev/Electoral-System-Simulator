@@ -15,7 +15,6 @@ angular.module('stvApp')
         // Public properties, assigned to the instance ('this')
 
         this.initialize = function(candidateObject) {
-          console.log('Vote Factory init Vote');
           this.candidateKey = candidateObject.key;
         };
 

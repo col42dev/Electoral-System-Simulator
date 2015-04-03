@@ -26,19 +26,25 @@ angular.module('stvApp')
     };
 
     this.placeVotes  = function() {
+
+      // Reset Candidate votes
+      angular.forEach(this.candidatesArray, ( function(thisCandidate) {
+        thisCandidate.resetVotes();
+       }).bind(this)); 
+
+      // Generate Votes
       this.voteArray = [];
       var voteIndex = 0;
       for (; voteIndex < this.voteCount; voteIndex ++) {
         var randomCandidateIndex = Math.floor(Math.random() * this.candidatesArray.length);
-        console.log('randomCandidateIndex = ' + randomCandidateIndex);
         this.placeVote( this.candidatesArray[randomCandidateIndex] );
       }
+
     };
 
     this.placeVote = function(candidateObject) {
-      console.log('Election Factory create Vote');
-
       this.voteArray.push( new Vote(candidateObject) );
+      candidateObject.voteCount += 1;
     };
 
 

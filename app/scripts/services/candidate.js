@@ -11,6 +11,8 @@ angular.module('stvApp')
     this.key = candidateObj.key;
     this.firstName = candidateObj.firstName;
     this.lastName = candidateObj.lastName;
+
+    this.resetVotes();
   }
  
   /**
@@ -19,7 +21,14 @@ angular.module('stvApp')
   Candidate.prototype.getFullName = function () {
     return this.firstName + ' ' + this.lastName;
   };
+
+  Candidate.prototype.resetVotes = function () {
+    this.voteCount = 0;
+  };
  
+  Candidate.prototype.getVoteCount = function () {
+    return this.voteCount;
+  };
 
  
   /**

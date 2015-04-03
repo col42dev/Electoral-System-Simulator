@@ -28,4 +28,8 @@
 
 	</br>
 	<p>results</p>
+	<div ng-repeat="item in election.candidatesArray">
+		<label> Candate {{item.firstName}}:</label>
+		<input ng-model="item.voteCount" type="text">
+	</div>
 
