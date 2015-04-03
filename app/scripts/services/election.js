@@ -34,6 +34,8 @@ angular.module('stvApp')
         thisCandidate.resetVotes();
        }).bind(this)); 
 
+      this.resultResolutionRounds = [];
+
       // Generate Votes
       this.voteArray = [];
       var voteIndex = 0;
@@ -45,6 +47,18 @@ angular.module('stvApp')
       //Calc Droop quota
       this.updateDroopQuota();
 
+      // results resolution
+      while ( !this.voteResolutionConditionsMet()) {
+
+      }
+
+    };
+
+    this.voteResolutionConditionsMet = function () {
+      this.resultResolutionRounds.push( {});
+      return 1; // calc against droop quota for this rounds. droop quota needs to be stored for each round.
+      // create a vote resolutions round factory for reolving each round.
+
     };
 
     this.placeVote = function(candidateObject) {
@@ -53,7 +67,7 @@ angular.module('stvApp')
     };
 
     this.updateDroopQuota = function() {
-      this.droopQuota = (this.voteCount / (this.seatsToFill + 1)) + 1;
+      this.droopQuota = Math.floor((this.voteCount / (this.seatsToFill + 1)) + 1);
     };
 
 

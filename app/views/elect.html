@@ -29,8 +29,10 @@
 	</br>
 	<p>RESULTS</p>
 	<p> Droop Quota: {{ election.droopQuota }} </p>
-	<div ng-repeat="item in election.candidatesArray">
-		<label> Candate {{item.firstName}}:</label>
-		<input ng-model="item.voteCount" type="text">
+	<div ng-repeat="item in election.resultResolutionRounds">
+		<p> Round {{$index+1}}</p>
+		<div ng-repeat="item in election.candidatesArray">
+			<label> 	Candidate {{item.firstName}}:</label>
+			<input ng-model="item.voteCount" type="text">
+		</div>
 	</div>
-
