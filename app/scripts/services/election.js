@@ -30,7 +30,7 @@ angular.module('stvApp')
     this.placeVotes  = function() {
      
 
-      // Reset votes
+      // Reset votes...
 
       //initilaize vote pref data store
       this.votePref = []; // index 0: vote pref; index 1: hash map of key of candidate; value: tally of votes for combination of vote pref and candidate.
@@ -44,12 +44,16 @@ angular.module('stvApp')
         }
        }).bind(this)); 
 
-      // Generate votes
-      for (var voteIndex = 0; voteIndex < this.voteCount; voteIndex++ ) {
+      // Generate votes.
+      for (var voterIndex = 0; voterIndex < this.voteCount; voterIndex++ ) {
+        // for this voter, randomly generate ranking of available candidates.
+        var voterOptionsArray = this.candidatesArray.slice();
+
         for ( var votePreferenceIndex=0; votePreferenceIndex < this.candidatesArray.length; votePreferenceIndex++) {
-            var randomCandidateIndex = Math.floor(Math.random() * this.candidatesArray.length);
-            var candidateKey = this.candidatesArray[randomCandidateIndex].key ;
+            var randomCandidateIndex = Math.floor(Math.random() * voterOptionsArray.length);
+            var candidateKey = voterOptionsArray[randomCandidateIndex].key ;
             this.votePref[ votePreferenceIndex ][ candidateKey ] += 1;
+            voterOptionsArray.splice(randomCandidateIndex, 1);
         }
       }
 
