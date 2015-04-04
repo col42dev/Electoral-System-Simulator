@@ -1,27 +1,24 @@
 <p>This is the elect view.</p>
 
 
-	<p>candidates</p>
+	<div>Candidates: <input ng-model="election.numberOfCandidates" type="text" ng-change="candidateCountChange()"> </div>
+
+
 	<div ng-repeat="item in election.candidatesArray">
-		<label> Input {{$index+1}}:</label>
-		<input ng-model="item.firstName" type="text">
+		<label>{{item.firstName}} {{item.lastName}}</label>
 	</div>
 
 	
-
-	</br>
-	<p>election.candidatesArray {{ election.candidatesArray }} </p>
 	
 	</br>
-	<div>
-		<label> Input VoteCount:</label>
-		<input ng-model="election.voteCount" type="text" ng-change="voteCountChange()">
-	</div>
+	<div> Seats To Fill: <input ng-model="election.seatsToFill" type="text" ng-change="seatsToFillChange()"> </div>
+
+	<div> Voters: <input ng-model="election.voteCount" type="text" ng-change="voteCountChange()"></div>
 
 	</br>
-	<p>VOTES</p>
+	<p>Votes Cast:</p>
 	<div ng-repeat="candidate in election.candidatesArray">
-		<label> Input {{$index+1}} {{candidate.firstName}}:</label> 
+		<label> {{candidate.firstName}} {{candidate.lastName}}:</label> 
 		<div style="display: inline" ng-repeat="votePrefIndex in election.candidatesArray"> 
 			<label>{{election.votePref[$index][candidate.key]}} </label>
 		</div>

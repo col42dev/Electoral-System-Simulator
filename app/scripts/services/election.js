@@ -7,11 +7,33 @@ angular.module('stvApp')
   /**
    * Constructor, with class name
    */
-  var Election = function(candidates) {
+  var Election = function(candidateCount) {
     // Public properties, assigned to the instance ('this')
+
+
 
     this.initialize = function() {
       console.log('Factory create Election');
+
+      this.numberOfCandidates = candidateCount;
+      var candidates = []; //[{key: 0, firstName:'fna', lastName:'lna'}, {key: 1, firstName:'fnb', lastName:'lnb'}, {key: 2, firstName:'fnc', lastName:'lnc'}];
+ 
+      function generateFirstName() {
+        var names = ['Noah', 'Sophia', 'Liam', 'Emma', 'Jacob', 'Olivia'];
+        return names[Math.floor(Math.random() * names.length)];
+      }
+
+      function generateLastName() {
+        var names = ['Smith', 'Johnson', 'Williams', 'Jones', 'Brown', 'Davis'];
+        return names[Math.floor(Math.random() * names.length)];
+      }
+
+      for ( var candidateIndex=0; candidateIndex < this.numberOfCandidates; candidateIndex++) {
+        var candidate = { key: candidateIndex, firstName: generateFirstName(), lastName: generateLastName()};
+        candidates.push( candidate );
+      }
+ 
+
 
       this.candidatesArray = [];
 
@@ -19,7 +41,7 @@ angular.module('stvApp')
         this.candidatesArray.push(new Candidate(thisCandidate));
        }).bind(this)); 
 
-      this.voteCount = 0; 
+      this.voteCount = 5; 
       this.seatsToFill = 1;
       this.droopQuota = 0;
 
@@ -34,11 +56,11 @@ angular.module('stvApp')
 
       //initilaize vote pref data store
       this.votePref = []; // index 0: vote pref; index 1: hash map of key of candidate; value: tally of votes for combination of vote pref and candidate.
-      angular.forEach(candidates, ( function() {
+      angular.forEach(this.candidatesArray, ( function() {
           this.votePref.push( {} );
         }).bind(this)); 
       
-      angular.forEach(candidates, ( function(thisCandidate) {
+      angular.forEach(this.candidatesArray, ( function(thisCandidate) {
         for ( var votePreferenceIndex=0; votePreferenceIndex < this.candidatesArray.length; votePreferenceIndex++) {
           this.votePref[votePreferenceIndex][thisCandidate.key] = 0;
         }

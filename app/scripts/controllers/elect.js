@@ -10,15 +10,20 @@
 angular.module('stvApp')
   .controller('ElectCtrl', function ($scope, Election) {
 
-
-	  var tmpCandidatesArray = [{key: 0, firstName:'fna', lastName:'lna'}, {key: 1, firstName:'fnb', lastName:'lnb'}, {key: 2, firstName:'fnc', lastName:'lnc'}];
-    
-    $scope.election = new Election(tmpCandidatesArray);
+  
+    $scope.election = new Election(3);
 
    	//console.log( '>' + JSON.stringify($scope.election) );
 
     $scope.voteCountChange = function() {
       $scope.election.placeVotes();
+    };
+
+    $scope.seatsToFillChange = function() {
+    };
+
+    $scope.candidateCountChange = function() {
+      $scope.election = new Election($scope.election.numberOfCandidates);
     };
 
   });
