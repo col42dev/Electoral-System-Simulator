@@ -91,7 +91,13 @@ angular.module('stvApp')
 
     };
 
-
+    this.meetsQuota = function( numberVotes ) {
+      if ( numberVotes >= this.getDroopQuota() ) {
+        return 'X';
+      }
+      return '';
+    };
+ 
     this.voteResolutionConditionsMet = function ( ) {
       //this.voteResolutionRounds.push( new VotingRound( ));
 
@@ -108,12 +114,9 @@ angular.module('stvApp')
       return 1; // todo: return 0 when round end update is implemented.
     };
 
-    this.calcDroopQuota = function() {
-      return  Math.floor((this.voteCount / (this.seatsToFill + 1)) + 1);
-    };
 
-    this.getDroopQuota = function( votingRoundIndex) {
-      return this.voteResolutionRounds[votingRoundIndex].droopQuota;
+    this.getDroopQuota = function() {
+      return Math.floor((this.voteCount / (this.seatsToFill + 1)) + 1);
     };
 
 

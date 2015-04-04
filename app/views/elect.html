@@ -1,50 +1,76 @@
 <p>This is the elect view.</p>
 
 
-	<div>Candidates: <input ng-model="election.numberOfCandidates" type="text" ng-change="candidateCountChange()"> </div>
-
-
-	<div ng-repeat="item in election.candidatesArray">
-		<label>{{item.firstName}} {{item.lastName}}</label>
-	</div>
-
-	
-	
-	</br>
-	<div> Seats To Fill: <input ng-model="election.seatsToFill" type="text" ng-change="seatsToFillChange()"> </div>
-
-	<div> Voters: <input ng-model="election.voteCount" type="text" ng-change="voteCountChange()"></div>
-
-	</br>
-	<p>Votes Cast:</p>
-	<table cellpadding="10" border="1">
-		<tr>
-			<th>Candidate Name</th> 
-			<th ng-repeat="votePrefIndex in election.candidatesArray">Preference {{$index+1}}</th>
-		</tr>
-		<tr ng-repeat="candidate in election.candidatesArray">
-			<td> {{candidate.firstName}} {{candidate.lastName}}</td> 
-			<td style="text-align:center;" ng-repeat="votePrefIndex in election.candidatesArray">{{election.votePref[$index][candidate.key]}}</td>
-		</tr>
-	</table>
-
-    </br>
-    </br>
-	<p>Rounds:</p>
-
-	<div ng-repeat="votingRound in election.voteResolutionRounds">
-		<p> round {{$index+1}} </p>
+	<h4>Candidates</h4> 
+	<ul style="list-style-type:none">
+	<li>
+		<input ng-model="election.numberOfCandidates" type="text" ng-change="candidateCountChange()"> 
+		</br>
+		</br>
 		<table cellpadding="10" border="1">
 			<tr>
-				<th>Candidate Name</th> 
-				<th ng-repeat="votePrefIndex in election.candidatesArray">Preference {{$index+1}}</th>
+				<th>Candidates</th> 
 			</tr>
-			<tr ng-repeat="candidate in election.candidatesArray">
-				<td> {{candidate.firstName}} {{candidate.lastName}}:</td> 
-				<td style="text-align:center;" ng-repeat="votePrefIndex in election.candidatesArray"> {{votingRound.votePref[$index][candidate.key]}} </td>
+			<tr ng-repeat="item in election.candidatesArray">
+				<td> {{item.firstName}} {{item.lastName}}</td> 
 			</tr>
 		</table>
-	</div>
+		</br>
+	</ul>
 
+	<h4>Seats</h4> 
+	<ul style="list-style-type:none">
+		<li>
+			<input ng-model="election.seatsToFill" type="text" ng-change="seatsToFillChange()">
+	</ul>
+	</br>
+
+	<h4>Voters</h4>
+	<ul style="list-style-type:none">
+		<li>
+			<input ng-model="election.voteCount" type="text" ng-change="voteCountChange()">
+	</ul>
+	</br>
+
+	<h4>Votes Cast:</h4>
+	<ul style="list-style-type:none">
+		<li>
+			<table cellpadding="10" border="1">
+				<tr>
+					<th>Candidates</th> 
+					<th ng-repeat="votePrefIndex in election.candidatesArray">Preference {{$index+1}}</th>
+				</tr>
+				<tr ng-repeat="candidate in election.candidatesArray">
+					<td> {{candidate.firstName}} {{candidate.lastName}}</td> 
+					<td style="text-align:center;" ng-repeat="votePrefIndex in election.candidatesArray">{{election.votePref[$index][candidate.key]}}</td>
+				</tr>
+			</table>
+			</br>
+
+		<li>	<p>Quota = ((votes cast / (seats to fill + 1)) + 1 = ( ({{election.voteCount}} / ( {{election.seatsToFill}} + 1)) + 1 = {{election.getDroopQuota()}}</p>
+   
+	</ul>
+
+	 </br>
+
+	<h4>Rounds:</h4>
+	<ul style="list-style-type:none">
+		<li>
+			<div ng-repeat="votingRound in election.voteResolutionRounds">
+				<p> Round {{$index+1}} </p>
+				<table cellpadding="10" border="1">
+					<tr>
+						<th>Candidates</th> 
+						<th ng-repeat="votePrefIndex in election.candidatesArray">Preference {{$index+1}}</th>
+						<th>Elected</th>
+					</tr>
+					<tr ng-repeat="candidate in election.candidatesArray">
+						<td> {{candidate.firstName}} {{candidate.lastName}}:</td> 
+						<td style="text-align:center;" ng-repeat="votePrefIndex in election.candidatesArray"> {{votingRound.votePref[$index][candidate.key]}} </td>
+						<td style="text-align:center;"> {{election.meetsQuota( votingRound.votePref[0][candidate.key] )}} </td>
+					</tr>
+				</table>
+			</div>
+	</ul>
 
 

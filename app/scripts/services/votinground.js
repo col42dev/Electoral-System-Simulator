@@ -26,6 +26,7 @@ angular.module('stvApp')
     };
 
 
+
     // Public API here
     return VotingRound;
 
