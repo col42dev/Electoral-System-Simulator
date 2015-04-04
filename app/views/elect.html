@@ -32,7 +32,23 @@
 	</ul>
 	</br>
 
-	<h4>Votes Cast:</h4>
+	<h4>Votes:</h4>
+	<ul style="list-style-type:none">
+		<li>
+			<table cellpadding="10" border="1">
+				<tr>
+					<th></th> 
+					<th ng-repeat="votePrefIndex in election.candidatesArray">Preference {{$index+1}}</th>
+				</tr>
+				<tr ng-repeat="vote in election.votesArray">
+					<td> Voter {{$index+1}}</td> 
+					<td style="text-align:center;" ng-repeat="candidateKey in vote">{{election.getCandidate(candidateKey).firstName}} {{election.getCandidate(candidateKey).lastName}}
+				</tr>
+			</table>
+			</br>   
+	</ul>
+
+	<h4>Votes Table:</h4>
 	<ul style="list-style-type:none">
 		<li>
 			<table cellpadding="10" border="1">
@@ -42,7 +58,7 @@
 				</tr>
 				<tr ng-repeat="candidate in election.candidatesArray">
 					<td> {{candidate.firstName}} {{candidate.lastName}}</td> 
-					<td style="text-align:center;" ng-repeat="votePrefIndex in election.candidatesArray">{{election.votePref[$index][candidate.key]}}</td>
+					<td style="text-align:center;" ng-repeat="votePrefIndex in election.candidatesArray">{{election.votePref[$index][candidate.key].length}}</td>
 				</tr>
 			</table>
 			</br>
@@ -66,9 +82,9 @@
 						<th>Elected</th>
 					</tr>
 					<tr ng-repeat="candidate in election.candidatesArray">
-						<td> {{candidate.firstName}} {{candidate.lastName}}:</td> 
-						<td style="text-align:center;" ng-repeat="votePrefIndex in election.candidatesArray"> {{votingRound.votePref[$index][candidate.key]}} </td>
-						<td style="text-align:center;"> {{election.meetsQuota( votingRound.votePref[0][candidate.key] )}} </td>
+						<td> {{candidate.firstName}} {{candidate.lastName}}</td> 
+						<td style="text-align:center;" ng-repeat="votePrefIndex in election.candidatesArray"> {{votingRound.votePref[$index][candidate.key].length}} </td>
+						<td style="text-align:center;"> {{election.meetsQuota( votingRound.votePref[0][candidate.key].length )}} </td>
 					</tr>
 				</table>
 		</ul>
