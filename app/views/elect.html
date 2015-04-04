@@ -17,11 +17,34 @@
 
 	</br>
 	<p>Votes Cast:</p>
-	<div ng-repeat="candidate in election.candidatesArray">
-		<label> {{candidate.firstName}} {{candidate.lastName}}:</label> 
-		<div style="display: inline" ng-repeat="votePrefIndex in election.candidatesArray"> 
-			<label>{{election.votePref[$index][candidate.key]}} </label>
-		</div>
+	<table cellpadding="10" border="1">
+		<tr>
+			<th>Candidate Name</th> 
+			<th ng-repeat="votePrefIndex in election.candidatesArray">Preference {{$index+1}}</th>
+		</tr>
+		<tr ng-repeat="candidate in election.candidatesArray">
+			<td> {{candidate.firstName}} {{candidate.lastName}}</td> 
+			<td style="text-align:center;" ng-repeat="votePrefIndex in election.candidatesArray">{{election.votePref[$index][candidate.key]}}</td>
+		</tr>
+	</table>
+
+    </br>
+    </br>
+	<p>Rounds:</p>
+
+	<div ng-repeat="votingRound in election.voteResolutionRounds">
+		<p> round {{$index+1}} </p>
+		<table cellpadding="10" border="1">
+			<tr>
+				<th>Candidate Name</th> 
+				<th ng-repeat="votePrefIndex in election.candidatesArray">Preference {{$index+1}}</th>
+			</tr>
+			<tr ng-repeat="candidate in election.candidatesArray">
+				<td> {{candidate.firstName}} {{candidate.lastName}}:</td> 
+				<td style="text-align:center;" ng-repeat="votePrefIndex in election.candidatesArray"> {{votingRound.votePref[$index][candidate.key]}} </td>
+			</tr>
+		</table>
 	</div>
+
 
 

@@ -12,15 +12,17 @@ angular.module('stvApp')
     // Service logic
     // ...
 
-    var VotingRound = function( droopQuota) {
+    var VotingRound = function( _votePref) {
         // Public properties, assigned to the instance ('this')
 
-        this.initialize = function(droopQuota) {
-          this.droopQuota = droopQuota;
+        this.initialize = function(_votePref) {
+
+          this.votePref = _votePref.slice();
+
         };
 
         // Call the initialize function for every new instance
-        this.initialize(droopQuota);
+        this.initialize(_votePref);
     };
 
 

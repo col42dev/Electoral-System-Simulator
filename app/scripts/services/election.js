@@ -16,7 +16,9 @@ angular.module('stvApp')
       console.log('Factory create Election');
 
       this.numberOfCandidates = candidateCount;
-      var candidates = []; //[{key: 0, firstName:'fna', lastName:'lna'}, {key: 1, firstName:'fnb', lastName:'lnb'}, {key: 2, firstName:'fnc', lastName:'lnc'}];
+
+      //Generate random candiates
+      var candidates = []; 
  
       function generateFirstName() {
         var names = ['Noah', 'Sophia', 'Liam', 'Emma', 'Jacob', 'Olivia'];
@@ -81,15 +83,17 @@ angular.module('stvApp')
 
       // results resolution
       this.voteResolutionRounds = [];
-      while ( !this.voteResolutionConditionsMet( this.calcDroopQuota( ))) {
+      var firstVotingRound = new VotingRound( this.votePref );
+      this.voteResolutionRounds.push(firstVotingRound);
 
-      }
+      //while ( !this.voteResolutionConditionsMet()) {
+      //}
 
     };
 
 
-    this.voteResolutionConditionsMet = function ( roundDroopQuota) {
-      this.voteResolutionRounds.push( new VotingRound( roundDroopQuota));
+    this.voteResolutionConditionsMet = function ( ) {
+      //this.voteResolutionRounds.push( new VotingRound( ));
 
 /*
       angular.forEach(this.candidatesArray, ( function(thisCandidate) {
