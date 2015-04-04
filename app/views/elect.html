@@ -54,9 +54,10 @@
 	 </br>
 
 	<h4>Rounds:</h4>
-	<ul style="list-style-type:none">
-		<li>
-			<div ng-repeat="votingRound in election.voteResolutionRounds">
+
+	<div ng-repeat="votingRound in election.voteResolutionRounds">
+		<ul style="list-style-type:none">
+			<li>
 				<p> Round {{$index+1}} </p>
 				<table cellpadding="10" border="1">
 					<tr>
@@ -70,7 +71,10 @@
 						<td style="text-align:center;"> {{election.meetsQuota( votingRound.votePref[0][candidate.key] )}} </td>
 					</tr>
 				</table>
-			</div>
-	</ul>
+		</ul>
+		</br>
+	</div>
+	</br>
+	
 
 

@@ -83,11 +83,19 @@ angular.module('stvApp')
 
       // results resolution
       this.voteResolutionRounds = [];
-      var firstVotingRound = new VotingRound( this.votePref );
-      this.voteResolutionRounds.push(firstVotingRound);
+      var latestVotingRound = new VotingRound( this.votePref );
+      this.voteResolutionRounds.push(latestVotingRound);
 
-      //while ( !this.voteResolutionConditionsMet()) {
-      //}
+      while ( this.voteResolutionConditionsMet() === false) {
+
+        console.log('>>>>>>>>NEXT ROUND');
+
+        // create new round
+        var thisVotingRound = new VotingRound( latestVotingRound.votePref );
+        this.voteResolutionRounds.push(thisVotingRound);
+
+        break; // for now only handle up to one additonal round
+      }
 
     };
 
@@ -99,19 +107,15 @@ angular.module('stvApp')
     };
  
     this.voteResolutionConditionsMet = function ( ) {
-      //this.voteResolutionRounds.push( new VotingRound( ));
 
-/*
-      angular.forEach(this.candidatesArray, ( function(thisCandidate) {
-        if ( thisCandidate.getVoteCount() > roundDroopQuota) {
-          return 1;
-        }
-       }).bind(this)); 
-*/
+      var quotaMet = this.candidatesArray.some( function( thisCandidate ) { 
+          if ( this.votePref[0][thisCandidate.key] >= this.getDroopQuota()) {
+            return true;
+          }
+          return false;
+        }.bind(this)); 
 
-        // remove the canidate with the fewest votes and transfer their votes.
-
-      return 1; // todo: return 0 when round end update is implemented.
+      return quotaMet;
     };
 
 

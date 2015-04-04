@@ -20,6 +20,7 @@ angular.module('stvApp')
     };
 
     $scope.seatsToFillChange = function() {
+      $scope.election.placeVotes();
     };
 
     $scope.candidateCountChange = function() {
