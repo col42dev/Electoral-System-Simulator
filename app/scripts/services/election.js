@@ -51,11 +51,7 @@ angular.module('stvApp')
         return candidates;
       }
 
-      this.candidatesArray = []; 
-
-      console.log('Election cc='+candidateCount);
-
-      
+      this.candidatesArray = [];       
 
       angular.forEach( generatedCandidates(this.numberOfCandidates), ( function(thisCandidate) {
         this.candidatesArray.push(new Candidate(thisCandidate));

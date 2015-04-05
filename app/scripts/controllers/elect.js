@@ -14,7 +14,6 @@ angular.module('stvApp')
 
 
     $scope.candidateCountChange = function() {
-       console.log('ElectCtrl cc='+$scope.election.numberOfCandidates);
       $scope.election = new Election($scope.election.numberOfCandidates);
     };
 
