@@ -80,11 +80,13 @@
 						<th>Candidates</th> 
 						<th ng-repeat="votePrefIndex in election.candidatesArray">Preference {{$index+1}}</th>
 						<th>Elected</th>
+						<th>Eliminated</th>
 					</tr>
 					<tr ng-repeat="candidate in election.candidatesArray">
 						<td> {{candidate.firstName}} {{candidate.lastName}}</td> 
 						<td style="text-align:center;" ng-repeat="votePrefIndex in election.candidatesArray"> {{votingRound.votePref[$index][candidate.key].length}} </td>
 						<td style="text-align:center;"> {{election.meetsQuota( votingRound.votePref[0][candidate.key].length )}} </td>
+						<td style="text-align:center;"> {{votingRound.showEliminated(candidate.key)}} </td>
 					</tr>
 				</table>
 		</ul>

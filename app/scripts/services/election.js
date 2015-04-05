@@ -108,16 +108,23 @@ angular.module('stvApp')
 
       // results resolution
       this.voteResolutionRounds = [];
-      var latestVotingRound = new VotingRound( this.votePref );
-      this.voteResolutionRounds.push(latestVotingRound);
+      this.voteResolutionRounds.push( new VotingRound( this.votePref ) );
 
-      while ( this.voteResolutionConditionsMet() === false) {
+      var thisVotingRound = this.voteResolutionRounds[this.voteResolutionRounds.length-1];
+
+      while ( true) {
+        if ( this.voteResolutionConditionsMet( thisVotingRound ) === false) {
+            // eliminate the candidate(s) with least votes.
+            thisVotingRound.eliminateCandidate(this.candidatesArray);
+        }
 
         console.log('>>>>>>>>NEXT ROUND');
 
         // create new round
-        var thisVotingRound = new VotingRound( latestVotingRound.votePref );
-        this.voteResolutionRounds.push(thisVotingRound);
+        var newVotingRound = new VotingRound( thisVotingRound.votePref );
+        this.voteResolutionRounds.push(newVotingRound);
+
+        thisVotingRound = this.voteResolutionRounds[this.voteResolutionRounds.length-1];
 
         // transfer any surplus votes to other candidates
 
@@ -133,10 +140,10 @@ angular.module('stvApp')
       return '';
     };
  
-    this.voteResolutionConditionsMet = function ( ) {
+    this.voteResolutionConditionsMet = function ( votingRound ) {
 
       var quotaMet = this.candidatesArray.some( function( thisCandidate ) { 
-          if ( this.votePref[0][thisCandidate.key].length >= this.getDroopQuota()) {
+          if ( votingRound.votePref[0][thisCandidate.key].length >= this.getDroopQuota()) {
             return true;
           }
           return false;
