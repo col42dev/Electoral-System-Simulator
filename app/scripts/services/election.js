@@ -15,7 +15,7 @@ angular.module('stvApp')
   /**
    * Constructor, with class name
    */
-  var Election = function(candidateCount) {
+  var Election = function(candidateCount, seatsToFillCount, votesCount) {
     // Public properties, assigned to the instance ('this')
 
 
@@ -57,8 +57,8 @@ angular.module('stvApp')
         this.candidatesArray.push(new Candidate(thisCandidate));
        }).bind(this)); 
 
-      this.voteCount = 5; 
-      this.seatsToFill = 1;
+      this.voteCount = votesCount; 
+      this.seatsToFill = seatsToFillCount;
       this.droopQuota = 0;
 
       // place votes

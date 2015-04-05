@@ -69,6 +69,24 @@ angular.module('stvApp')
 
             // store least votes count for this round.
             this.leastVoteAmount = leastVoteAmount;
+
+            // Randomly select single candidate from list of candiadtes with the least votes.
+            var potentialEliminationCandidateKeysArray = [];
+            angular.forEach(this.candidatesArray, ( function(thisCandidate) {
+                if (this.votePref[0][thisCandidate.key].length===this.leastVoteAmount) {
+                  potentialEliminationCandidateKeysArray.push( thisCandidate.key);
+                }
+            }).bind(this)); 
+
+            var randomEliminationCandidateIndex = Math.floor(Math.random() * potentialEliminationCandidateKeysArray.length);
+
+            // flag candidate as eliminated
+            angular.forEach(this.candidatesArray, ( function(thisCandidate) {
+                if (thisCandidate.key === randomEliminationCandidateIndex) {
+                  thisCandidate.eliminated = true;
+                }
+            }).bind(this)); 
+        
          };
 
         /**
@@ -77,9 +95,23 @@ angular.module('stvApp')
         * @return  char representation of eliminated candidate.
         */
         this.showEliminated = function(candidateKey) {
-          if (this.votePref[0][candidateKey].length<=this.leastVoteAmount){
+          //if (this.votePref[0][candidateKey].length<=this.leastVoteAmount){
+          //  return 'X';
+          //} 
+
+          var eliminated = this.candidatesArray.some( function( thisCandidate ) { 
+            if ( thisCandidate.key === candidateKey) {
+              if ( thisCandidate.eliminated === true) {
+                return true;
+              }
+            }
+            return false;
+          }.bind(this)); 
+
+          if ( eliminated === true) {
             return 'X';
-          } 
+          }
+
           return '';
         };
 

@@ -4,7 +4,7 @@
 	<h4>Candidates</h4> 
 	<ul style="list-style-type:none">
 	<li>
-		<input ng-model="election.numberOfCandidates" type="text" ng-change="candidateCountChange()"> 
+		<input ng-model="election.numberOfCandidates" type="text" ng-change="onParamaterChanged()"> 
 		</br>
 		</br>
 		<table cellpadding="10" border="1">
@@ -21,14 +21,14 @@
 	<h4>Seats</h4> 
 	<ul style="list-style-type:none">
 		<li>
-			<input ng-model="election.seatsToFill" type="text" ng-change="election.onSeatsToFillChange()">
+			<input ng-model="election.seatsToFill" type="text" ng-change="onParamaterChanged()">
 	</ul>
 	</br>
 
 	<h4>Voters</h4>
 	<ul style="list-style-type:none">
 		<li>
-			<input ng-model="election.voteCount" type="text" ng-change="election.onVoteCountChange()">
+			<input ng-model="election.voteCount" type="text" ng-change="onParamaterChanged()">
 	</ul>
 	</br>
 

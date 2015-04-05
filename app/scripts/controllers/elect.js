@@ -10,11 +10,11 @@
 angular.module('stvApp')
   .controller('ElectCtrl', function ($scope, Election) {
   
-    $scope.election = new Election(3);
+    $scope.election = new Election(3, 1, 5);
 
 
-    $scope.candidateCountChange = function() {
-      $scope.election = new Election($scope.election.numberOfCandidates);
+    $scope.onParamaterChanged = function() {
+      $scope.election = new Election($scope.election.numberOfCandidates, $scope.election.seatsToFill, $scope.election.voteCount);
     };
 
   });

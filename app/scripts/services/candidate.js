@@ -11,6 +11,7 @@ angular.module('stvApp')
     this.key = candidateObj.key;
     this.firstName = candidateObj.firstName;
     this.lastName = candidateObj.lastName;
+    this.eliminated = false;
 
   }
  
