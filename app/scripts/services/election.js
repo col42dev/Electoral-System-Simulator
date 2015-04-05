@@ -175,21 +175,17 @@ angular.module('stvApp')
 
       var thisVotingRound = this.voteResolutionRounds[this.voteResolutionRounds.length-1];
 
-      while ( true) {
-        if ( thisVotingRound.isCandidateElected( this.getDroopQuota()) === false) {
-            // eliminate the candidate(s) with least votes.
-            thisVotingRound.eliminateCandidate();
+
+      while ( thisVotingRound !== null) {
+
+        var newVotingRound = thisVotingRound.processVoteResolution( this.getDroopQuota());
+
+        if ( newVotingRound !== null) {
+          this.voteResolutionRounds.push(newVotingRound);
+          thisVotingRound = this.voteResolutionRounds[this.voteResolutionRounds.length-1];
+        } else {
+          thisVotingRound = null;
         }
-
-        console.log('>>>>>>>>NEXT ROUND');
-
-        // create new round
-        var newVotingRound = new VotingRound( thisVotingRound.votePref, thisVotingRound.candidatesArray );
-        this.voteResolutionRounds.push(newVotingRound);
-
-        thisVotingRound = this.voteResolutionRounds[this.voteResolutionRounds.length-1];
-
-        // transfer any surplus votes to other candidates.
 
         break; // for now only handle up to one additonal round
       }

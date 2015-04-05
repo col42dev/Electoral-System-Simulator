@@ -21,6 +21,41 @@ angular.module('stvApp')
         };
 
         /**
+        * @desc voting round resolution
+        * @param droopQuota
+        */
+        this.processVoteResolution = function( droopQuota) {
+
+          if ( this.isCandidateElected( droopQuota) === false) {
+            // eliminate the candidate(s) with least votes.
+            this.eliminateCandidate();
+          }
+
+          console.log('>>>>>>>>NEXT ROUND');
+
+          // create new round
+          var newVotingRound = new VotingRound( this.votePref, this.candidatesArray );
+
+          return newVotingRound;
+        };
+
+        /**
+        * @desc has a candidate enough votes to be eleceted.
+        * @param droopQuota value
+        * @return true if candidate is elected, otherwise false.
+        */
+        this.isCandidateElected = function ( droopQuota ) {
+          var quotaMet = this.candidatesArray.some( function( thisCandidate ) { 
+            if ( this.votePref[0][thisCandidate.key].length >= droopQuota) {
+              return true;
+            }
+            return false;
+          }.bind(this)); 
+
+          return quotaMet;
+        };
+
+        /**
         * @desc determine candidate to be eliminted.
         * @param candidates for this round.
         */
@@ -58,22 +93,6 @@ angular.module('stvApp')
             return 'X';
           } 
           return '';
-        };
-
-       /**
-        * @desc has a candidate enough votes to be eleceted.
-        * @param droopQuota value
-        * @return true if candidate is elected, otherwise false.
-        */
-        this.isCandidateElected = function ( droopQuota ) {
-          var quotaMet = this.candidatesArray.some( function( thisCandidate ) { 
-            if ( this.votePref[0][thisCandidate.key].length >= droopQuota) {
-              return true;
-            }
-            return false;
-          }.bind(this)); 
-
-          return quotaMet;
         };
 
         // Call the initialize function for every new instance
