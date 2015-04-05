@@ -95,9 +95,6 @@ angular.module('stvApp')
         * @return  char representation of eliminated candidate.
         */
         this.showEliminated = function(candidateKey) {
-          //if (this.votePref[0][candidateKey].length<=this.leastVoteAmount){
-          //  return 'X';
-          //} 
 
           var eliminated = this.candidatesArray.some( function( thisCandidate ) { 
             if ( thisCandidate.key === candidateKey) {

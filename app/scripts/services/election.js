@@ -88,20 +88,6 @@ angular.module('stvApp')
       return Math.floor((this.votesArray.length / (this.seatsToFill + 1)) + 1);
     };
 
-    /**
-    * @desc - called on change of input param for the number of seats to fill.
-    */
-    this.onSeatsToFillChange = function() {
-      this.runElection();
-    };
-
-    /**
-    * @desc - called on change of input param for the number of votes.
-    */
-    this.onVoteCountChange = function() {
-      this.runElection();
-    };
-
 
     /**
     * @desc 
@@ -114,7 +100,6 @@ angular.module('stvApp')
       this.generateVoteMap();
 
       this.processVoteResolution();
-
     };
 
     /**
