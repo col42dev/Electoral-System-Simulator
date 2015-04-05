@@ -24,6 +24,8 @@ angular.module('stvApp')
       console.log('Factory create Election');
 
 
+      this.numberOfCandidates = candidateCount;
+
       /**
       * @desc Generate random candiates
       * @return 
@@ -51,9 +53,9 @@ angular.module('stvApp')
 
       this.candidatesArray = []; 
 
-      console.log('cc='+candidateCount);
+      console.log('Election cc='+candidateCount);
 
-      this.numberOfCandidates = candidateCount;
+      
 
       angular.forEach( generatedCandidates(this.numberOfCandidates), ( function(thisCandidate) {
         this.candidatesArray.push(new Candidate(thisCandidate));
