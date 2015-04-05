@@ -4,7 +4,7 @@
 	<h4>Candidates</h4> 
 	<ul style="list-style-type:none">
 	<li>
-		<input ng-model="election.numberOfCandidates" type="text" ng-change="candidateCountChange()"> 
+		<input ng-model="election.candidatesArray.length" type="text" ng-change="candidateCountChange()"> 
 		</br>
 		</br>
 		<table cellpadding="10" border="1">
@@ -21,14 +21,14 @@
 	<h4>Seats</h4> 
 	<ul style="list-style-type:none">
 		<li>
-			<input ng-model="election.seatsToFill" type="text" ng-change="seatsToFillChange()">
+			<input ng-model="election.seatsToFill" type="text" ng-change="election.onSeatsToFillChange()">
 	</ul>
 	</br>
 
 	<h4>Voters</h4>
 	<ul style="list-style-type:none">
 		<li>
-			<input ng-model="election.voteCount" type="text" ng-change="voteCountChange()">
+			<input ng-model="election.voteCount" type="text" ng-change="election.onVoteCountChange()">
 	</ul>
 	</br>
 
@@ -78,14 +78,14 @@
 				<table cellpadding="10" border="1">
 					<tr>
 						<th>Candidates</th> 
-						<th ng-repeat="votePrefIndex in election.candidatesArray">Preference {{$index+1}}</th>
+						<th ng-repeat="votePrefIndex in votingRound.candidatesArray">Preference {{$index+1}}</th>
 						<th>Elected</th>
 						<th>Eliminated</th>
 					</tr>
-					<tr ng-repeat="candidate in election.candidatesArray">
+					<tr ng-repeat="candidate in votingRound.candidatesArray">
 						<td> {{candidate.firstName}} {{candidate.lastName}}</td> 
-						<td style="text-align:center;" ng-repeat="votePrefIndex in election.candidatesArray"> {{votingRound.votePref[$index][candidate.key].length}} </td>
-						<td style="text-align:center;"> {{election.meetsQuota( votingRound.votePref[0][candidate.key].length )}} </td>
+						<td style="text-align:center;" ng-repeat="votePrefIndex in votingRound.candidatesArray"> {{votingRound.votePref[$index][candidate.key].length}} </td>
+						<td style="text-align:center;"> {{votingRound.showElected( election.getDroopQuota(), candidate.key  )}} </td>
 						<td style="text-align:center;"> {{votingRound.showEliminated(candidate.key)}} </td>
 					</tr>
 				</table>
