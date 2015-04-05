@@ -69,6 +69,7 @@ angular.module('stvApp')
 
             // store least votes count for this round.
             this.leastVoteAmount = leastVoteAmount;
+            console.log('LEAST VOTE Amount ' + this.leastVoteAmount);
 
             // Randomly select single candidate from list of candiadtes with the least votes.
             var potentialEliminationCandidateKeysArray = [];
@@ -78,11 +79,11 @@ angular.module('stvApp')
                 }
             }).bind(this)); 
 
-            var randomEliminationCandidateIndex = Math.floor(Math.random() * potentialEliminationCandidateKeysArray.length);
+            var eliminatedCandidateKey = potentialEliminationCandidateKeysArray[ Math.floor(Math.random() * potentialEliminationCandidateKeysArray.length)];
 
             // flag candidate as eliminated
             angular.forEach(this.candidatesArray, ( function(thisCandidate) {
-                if (thisCandidate.key === randomEliminationCandidateIndex) {
+                if (thisCandidate.key === eliminatedCandidateKey) {
                   thisCandidate.eliminated = true;
                 }
             }).bind(this)); 
