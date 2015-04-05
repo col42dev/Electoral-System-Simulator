@@ -16,8 +16,15 @@ angular.module('stvApp')
         // Public properties, assigned to the instance ('this')
 
         this.initialize = function(thisVotePref, thisCandidatesArray) {
-          this.votePref = thisVotePref.slice();
-          this.candidatesArray = thisCandidatesArray.slice();
+
+          // deep copy votePref
+          this.votePref = [];
+          angular.copy( thisVotePref, this.votePref);
+
+          //deep copy candidateArray
+          this.candidatesArray = [];
+          angular.copy( thisCandidatesArray, this.candidatesArray);
+
         };
 
         /**
@@ -26,15 +33,25 @@ angular.module('stvApp')
         */
         this.processVoteResolution = function( droopQuota) {
 
+          var eliminationVotesToTransfer = [];
+
           if ( this.isCandidateElected( droopQuota) === false) {
             // eliminate the candidate(s) with least votes.
-            this.eliminateCandidate();
+            eliminationVotesToTransfer = this.processCandidateEliminaton();
           }
 
           console.log('>>>>>>>>NEXT ROUND');
 
-          // create new round
+          // create new round.
           var newVotingRound = new VotingRound( this.votePref, this.candidatesArray );
+
+          newVotingRound.removeEliminatedCandidate();
+
+          if ( eliminationVotesToTransfer.length > 0) {
+            newVotingRound.transferEliminationVotes( eliminationVotesToTransfer);
+          }
+
+          
 
           return newVotingRound;
         };
@@ -58,8 +75,9 @@ angular.module('stvApp')
         /**
         * @desc determine candidate to be eliminted.
         * @param candidates for this round.
+        * @return array of votes to be transferred to other candidates,
         */
-        this.eliminateCandidate = function() {
+        this.processCandidateEliminaton = function() {
             var leastVoteAmount = Number.MAX_VALUE;
             angular.forEach(this.candidatesArray, ( function(thisCandidate) {
                 if (this.votePref[0][thisCandidate.key].length<leastVoteAmount) {
@@ -69,7 +87,7 @@ angular.module('stvApp')
 
             // store least votes count for this round.
             this.leastVoteAmount = leastVoteAmount;
-            console.log('LEAST VOTE Amount ' + this.leastVoteAmount);
+            //console.log('LEAST VOTE Amount ' + this.leastVoteAmount);
 
             // Randomly select single candidate from list of candiadtes with the least votes.
             var potentialEliminationCandidateKeysArray = [];
@@ -87,8 +105,59 @@ angular.module('stvApp')
                   thisCandidate.eliminated = true;
                 }
             }).bind(this)); 
-        
-         };
+
+
+            // vote transfer
+            var votesToTransfer = [];
+            this.votePref[0][eliminatedCandidateKey].forEach( function( vote)  {
+
+                votesToTransfer.push( vote);
+              }.bind(this)
+            );
+
+            console.log('Votes to transfer ' + votesToTransfer.length);
+
+            return votesToTransfer;
+        };
+
+
+        /**
+        * @desc transfer votes from an eliminated candidate
+        * @param  array of votes to be transfered.
+        */
+        this.transferEliminationVotes = function( votesToTransfer) {
+          votesToTransfer.forEach( function( vote)  {
+                var transferToCandidateKey = vote[1]; // need to handle cases where this candidate is already eliminated or elected.
+                this.votePref[0][transferToCandidateKey].push(vote);
+              }.bind(this)
+            );
+        };
+
+
+        /**
+        * @desc remove candidates which has been falgged for elimination.
+
+        */
+        this.removeEliminatedCandidate = function() {
+
+            console.log('removeEliminatedCandidate');
+
+            var eliminatedCandidateIndex = -1;
+            angular.forEach(this.candidatesArray, ( function(thisCandidate, index) {
+                if (thisCandidate.eliminated === true) {
+                  eliminatedCandidateIndex = index;
+                }
+            }).bind(this)); 
+
+            console.log('eliminatedCandidateIndex = ' + eliminatedCandidateIndex);
+
+
+            if (eliminatedCandidateIndex >= 0) {
+              this.candidatesArray.splice(eliminatedCandidateIndex, 1);
+            }
+        };
+    
+    
 
         /**
         * @desc determinate if candidate is to be eliminated in this round. 
