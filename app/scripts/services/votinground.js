@@ -51,8 +51,6 @@ angular.module('stvApp')
             newVotingRound.transferEliminationVotes( eliminationVotesToTransfer);
           }
 
-          
-
           return newVotingRound;
         };
 
@@ -110,12 +108,9 @@ angular.module('stvApp')
             // vote transfer
             var votesToTransfer = [];
             this.votePref[0][eliminatedCandidateKey].forEach( function( vote)  {
-
                 votesToTransfer.push( vote);
               }.bind(this)
             );
-
-            console.log('Votes to transfer ' + votesToTransfer.length);
 
             return votesToTransfer;
         };
@@ -135,12 +130,9 @@ angular.module('stvApp')
 
 
         /**
-        * @desc remove candidates which has been falgged for elimination.
-
+        * @desc remove candidate which has been flagged for elimination.
         */
         this.removeEliminatedCandidate = function() {
-
-            console.log('removeEliminatedCandidate');
 
             var eliminatedCandidateIndex = -1;
             angular.forEach(this.candidatesArray, ( function(thisCandidate, index) {
@@ -148,9 +140,6 @@ angular.module('stvApp')
                   eliminatedCandidateIndex = index;
                 }
             }).bind(this)); 
-
-            console.log('eliminatedCandidateIndex = ' + eliminatedCandidateIndex);
-
 
             if (eliminatedCandidateIndex >= 0) {
               this.candidatesArray.splice(eliminatedCandidateIndex, 1);
