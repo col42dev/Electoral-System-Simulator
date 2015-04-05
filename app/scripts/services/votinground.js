@@ -31,22 +31,18 @@ angular.module('stvApp')
             }).bind(this)); 
 
             // store least votes count for this round.
-            this.setLeastVoteAmount(leastVoteAmount);
+            this.leastVoteAmount = leastVoteAmount;
 
          };
 
         this.showEliminated = function( candidateKey) {
-
-          if ( this.votePref[0][candidateKey].length <=this.leastVoteAmount ){
+          if (this.votePref[0][candidateKey].length <= this.leastVoteAmount){
             return 'X';
           } 
 
           return '';
         };
 
-        this.setLeastVoteAmount = function( _leastVoteAmount) {
-          this.leastVoteAmount = _leastVoteAmount;
-        };
 
         // Call the initialize function for every new instance
         this.initialize(_votePref);
