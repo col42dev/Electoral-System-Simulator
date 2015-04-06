@@ -86,7 +86,9 @@ angular.module('stvApp')
     * @return integer value quota
     */
     this.getDroopQuota = function() {
-      return Math.floor((this.votesArray.length / (this.seatsToFill + 1)) + 1);
+      var dq = (this.votesArray.length / (parseInt( this.seatsToFill) + 1)) + 1;
+      var dq_ = Math.floor( dq);
+      return dq_;
     };
 
 
@@ -171,15 +173,20 @@ angular.module('stvApp')
           this.electedCandidatesArray.push( thisVotingRound.electedCandidate);
         }
 
-        if ( newVotingRound !== null) {
-          this.voteResolutionRounds.push(newVotingRound);
-          thisVotingRound = this.voteResolutionRounds[this.voteResolutionRounds.length-1];
+        // have required number of candidates been elected?
+        if ( this.electedCandidatesArray.length >= this.seatsToFill) {
+          thisVotingRound = null; // specify no more voting rounds. 
         } else {
-          thisVotingRound = null;
+          // append new voting round.
+          if ( newVotingRound !== null) {
+            this.voteResolutionRounds.push(newVotingRound);
+            thisVotingRound = this.voteResolutionRounds[this.voteResolutionRounds.length-1];
+          } else {
+            thisVotingRound = null;
+          }
         }
-
-        break; // for now only handle up to one additonal round
       }
+
     };
 
     // Call the initialize function for every new instance
