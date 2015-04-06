@@ -1,12 +1,21 @@
-<p>This is the elect view.</p>
+<h3>Electoral System Simulator.</h3>
+
+Chose values for the inputs then hit the execute button to run the election. Candidates and votes will be generated randomly based off the input values, the results will be calculated using the single transferable vote system and displayed below. 
+
+	<h4>Inputs</h4> 
+	<ul style="list-style-type:none">
+		<li>
+			<p>Input the number of candidates who will stand at this election. All candidates are considered independent, party affiliations are not simulated. <input ng-model="election.numberOfCandidates" type="number" ng-change="onParamaterChanged()" min="2" max="20"> </p>
+		<li>
+			<p>Input the number of seats to be filled in this election.<input ng-model="election.seatsToFill" type="number" ng-change="onParamaterChanged()" min="1" max="20"></p>
+		<li>
+			<p>Select the number of votes to cast.<input ng-model="election.voteCount" type="number" ng-change="onParamaterChanged()" min="1" max="20"></p>
+	</ul>
 
 
 	<h4>Candidates</h4> 
 	<ul style="list-style-type:none">
 	<li>
-		<input ng-model="election.numberOfCandidates" type="text" ng-change="onParamaterChanged()"> 
-		</br>
-		</br>
 		<table cellpadding="10" border="1">
 			<tr>
 				<th>Candidates</th> 
@@ -17,20 +26,6 @@
 		</table>
 		</br>
 	</ul>
-
-	<h4>Seats</h4> 
-	<ul style="list-style-type:none">
-		<li>
-			<input ng-model="election.seatsToFill" type="text" ng-change="onParamaterChanged()">
-	</ul>
-	</br>
-
-	<h4>Voters</h4>
-	<ul style="list-style-type:none">
-		<li>
-			<input ng-model="election.voteCount" type="text" ng-change="onParamaterChanged()">
-	</ul>
-	</br>
 
 	<h4>Votes:</h4>
 	<ul style="list-style-type:none">
