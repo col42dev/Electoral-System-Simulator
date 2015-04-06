@@ -51,6 +51,7 @@ angular.module('stvApp')
         return candidates;
       }
 
+      this.electedCandidatesArray = [];    
       this.candidatesArray = [];       
 
       angular.forEach( generatedCandidates(this.numberOfCandidates), ( function(thisCandidate) {
@@ -99,7 +100,7 @@ angular.module('stvApp')
 
       this.generateVoteMap();
 
-      this.processVoteResolution();
+      this.processVoteResolution(); 
     };
 
     /**
@@ -163,7 +164,12 @@ angular.module('stvApp')
 
       while ( thisVotingRound !== null) {
 
-        var newVotingRound = thisVotingRound.processVoteResolution( this.getDroopQuota());
+        var newVotingRound = thisVotingRound.process( this.getDroopQuota());
+
+        // store elected candidate from round
+        if ( thisVotingRound.electedCandidate !== null) {
+          this.electedCandidatesArray.push( thisVotingRound.electedCandidate);
+        }
 
         if ( newVotingRound !== null) {
           this.voteResolutionRounds.push(newVotingRound);

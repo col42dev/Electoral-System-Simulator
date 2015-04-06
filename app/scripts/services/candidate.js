@@ -12,6 +12,7 @@ angular.module('stvApp')
     this.firstName = candidateObj.firstName;
     this.lastName = candidateObj.lastName;
     this.eliminated = false;
+    this.elected = false;
 
   }
  

@@ -85,14 +85,28 @@
 					<tr ng-repeat="candidate in votingRound.candidatesArray">
 						<td> {{candidate.firstName}} {{candidate.lastName}}</td> 
 						<td style="text-align:center;" ng-repeat="votePrefIndex in votingRound.candidatesArray"> {{votingRound.votePref[$index][candidate.key].length}} </td>
-						<td style="text-align:center;"> {{votingRound.showElected( election.getDroopQuota(), candidate.key  )}} </td>
-						<td style="text-align:center;"> {{votingRound.showEliminated(candidate.key)}} </td>
+						<td style="text-align:center;">{{ votingRound.showElected( candidate.key) }} </td>
+						<td style="text-align:center;">{{ votingRound.showEliminated( candidate.key) }} </td>
 					</tr>
 				</table>
 		</ul>
 		</br>
 	</div>
 	</br>
+
+	<h4>Elected Candidates</h4> 
+	<ul style="list-style-type:none">
+	<li>
+		<table cellpadding="10" border="1">
+			<tr>
+				<th>Candidates</th> 
+			</tr>
+			<tr ng-repeat="item in election.electedCandidatesArray">
+				<td> {{item.firstName}} {{item.lastName}}</td> 
+			</tr>
+		</table>
+		</br>
+	</ul>
 	
 
 

@@ -25,17 +25,24 @@ angular.module('stvApp')
           this.candidatesArray = [];
           angular.copy( thisCandidatesArray, this.candidatesArray);
 
+          //
+          this.electedCandidate = null;
+
         };
 
         /**
         * @desc voting round resolution
         * @param droopQuota
         */
-        this.processVoteResolution = function( droopQuota) {
+        this.process = function( droopQuota) {
 
           var eliminationVotesToTransfer = [];
 
-          if ( this.isCandidateElected( droopQuota) === false) {
+          var electedCandidate = this.getElectedCandidate( droopQuota);
+          if ( electedCandidate !== null) {
+            electedCandidate.elected = true;
+            this.electedCandidate = electedCandidate;
+          } else {
             // eliminate the candidate(s) with least votes.
             eliminationVotesToTransfer = this.processCandidateEliminaton();
           }
@@ -45,29 +52,35 @@ angular.module('stvApp')
           // create new round.
           var newVotingRound = new VotingRound( this.votePref, this.candidatesArray );
 
-          newVotingRound.removeEliminatedCandidate();
-
-          if ( eliminationVotesToTransfer.length > 0) {
-            newVotingRound.transferEliminationVotes( eliminationVotesToTransfer);
+          // remove elected/elimiated candidates and transfer their votes.
+          if ( electedCandidate !== null) {
+            newVotingRound.removeElectedCandidate();
+          } else {
+            newVotingRound.removeEliminatedCandidate();
+            if ( eliminationVotesToTransfer.length > 0) {
+              newVotingRound.transferEliminationVotes( eliminationVotesToTransfer);
+            }
           }
 
           return newVotingRound;
         };
 
         /**
-        * @desc has a candidate enough votes to be eleceted.
+        * @desc has a candidate enough votes to be elected.
         * @param droopQuota value
-        * @return true if candidate is elected, otherwise false.
+        * @return elected candidate reference.
         */
-        this.isCandidateElected = function ( droopQuota ) {
-          var quotaMet = this.candidatesArray.some( function( thisCandidate ) { 
+        this.getElectedCandidate = function ( droopQuota ) {
+          var electedCandidate = null;
+          this.candidatesArray.some( function( thisCandidate ) { 
             if ( this.votePref[0][thisCandidate.key].length >= droopQuota) {
+              electedCandidate = thisCandidate;
               return true;
             }
             return false;
           }.bind(this)); 
 
-          return quotaMet;
+          return electedCandidate;
         };
 
         /**
@@ -128,12 +141,10 @@ angular.module('stvApp')
             );
         };
 
-
         /**
         * @desc remove candidate which has been flagged for elimination.
         */
         this.removeEliminatedCandidate = function() {
-
             var eliminatedCandidateIndex = -1;
             angular.forEach(this.candidatesArray, ( function(thisCandidate, index) {
                 if (thisCandidate.eliminated === true) {
@@ -145,9 +156,23 @@ angular.module('stvApp')
               this.candidatesArray.splice(eliminatedCandidateIndex, 1);
             }
         };
-    
-    
 
+        /**
+        * @desc remove candidate which has been flagged for election.
+        */
+        this.removeElectedCandidate = function() {
+            var electedCandidateIndex = -1;
+            angular.forEach(this.candidatesArray, ( function(thisCandidate, index) {
+                if (thisCandidate.elected === true) {
+                  electedCandidateIndex = index;
+                }
+            }).bind(this)); 
+
+            if (electedCandidateIndex >= 0) {
+              this.candidatesArray.splice(electedCandidateIndex, 1);
+            }
+        };
+    
         /**
         * @desc determinate if candidate is to be eliminated in this round. 
         * @param candidate key.
@@ -172,14 +197,24 @@ angular.module('stvApp')
         };
 
         /**
-        * @desc determinate if candidate is to be elected in this round. 
+        * @desc render for elected candidate
         * @param candidate key.
-        * @return  char representation of elected candidate.
+        * @return char representation of elected candidate.
         */
-        this.showElected= function(droopQuota, candidateKey) {
-          if (this.votePref[0][candidateKey].length>=droopQuota){
+        this.showElected = function(candidateKey) {
+          var elected = this.candidatesArray.some( function( thisCandidate ) { 
+            if ( thisCandidate.key === candidateKey) {
+              if ( thisCandidate.elected === true) {
+                return true;
+              }
+            }
+            return false;
+          }.bind(this)); 
+
+          if ( elected === true) {
             return 'X';
-          } 
+          }
+
           return '';
         };
 
