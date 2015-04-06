@@ -10,7 +10,7 @@
 angular.module('stvApp')
   .controller('ElectCtrl', function ($scope, Election) {
   
-    $scope.election = new Election(3, 1, 5);
+    $scope.election = new Election(3, 2, 5);
 
 
     $scope.onParamaterChanged = function() {

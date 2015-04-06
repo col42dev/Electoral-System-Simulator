@@ -21,13 +21,12 @@ angular.module('stvApp')
           this.votePref = [];
           angular.copy( thisVotePref, this.votePref);
 
-          //deep copy candidateArray
+          // deep copy candidateArray
           this.candidatesArray = [];
           angular.copy( thisCandidatesArray, this.candidatesArray);
 
-          //
-          this.electedCandidate = null;
-
+          
+          this.electedCandidates = []; // candidates elected during this round.
         };
 
         /**
@@ -38,10 +37,12 @@ angular.module('stvApp')
 
           var eliminationVotesToTransfer = [];
 
-          var electedCandidate = this.getElectedCandidate( droopQuota);
-          if ( electedCandidate !== null) {
-            electedCandidate.elected = true;
-            this.electedCandidate = electedCandidate;
+          this.electedCandidates = this.getElectedCandidates( droopQuota);
+          if ( this.electedCandidates.length > 0) {
+              // flag elected candidates
+              angular.forEach( this.electedCandidates, ( function( electedCandidate) { 
+                electedCandidate.elected = true;
+              }).bind( this)); 
           } else {
             // eliminate the candidate(s) with least votes.
             eliminationVotesToTransfer = this.processCandidateEliminaton();
@@ -50,11 +51,11 @@ angular.module('stvApp')
           console.log('>>>>>>>>NEXT ROUND');
 
           // create new round.
-          var newVotingRound = new VotingRound( this.votePref, this.candidatesArray );
+          var newVotingRound = new VotingRound( this.votePref, this.candidatesArray);
 
           // remove elected/elimiated candidates and transfer their votes.
-          if ( electedCandidate !== null) {
-            newVotingRound.removeElectedCandidate();
+          if ( this.electedCandidates.length > 0) {
+            newVotingRound.removeElectedCandidates();
           } else {
             newVotingRound.removeEliminatedCandidate();
             if ( eliminationVotesToTransfer.length > 0) {
@@ -66,21 +67,19 @@ angular.module('stvApp')
         };
 
         /**
-        * @desc has a candidate enough votes to be elected.
-        * @param droopQuota value
-        * @return elected candidate reference.
+        * @desc Generate list of elected candidates.
+        * @param droopQuota value - number of votes required to be elected.
+        * @return elected candidate array.
         */
-        this.getElectedCandidate = function ( droopQuota ) {
-          var electedCandidate = null;
+        this.getElectedCandidates = function ( droopQuota ) {
+          var electedCandidates = [];
           this.candidatesArray.some( function( thisCandidate ) { 
             if ( this.votePref[0][thisCandidate.key].length >= droopQuota) {
-              electedCandidate = thisCandidate;
-              return true;
+              electedCandidates.push( thisCandidate);
             }
-            return false;
           }.bind(this)); 
 
-          return electedCandidate;
+          return electedCandidates;
         };
 
         /**
@@ -98,7 +97,6 @@ angular.module('stvApp')
 
             // store least votes count for this round.
             this.leastVoteAmount = leastVoteAmount;
-            //console.log('LEAST VOTE Amount ' + this.leastVoteAmount);
 
             // Randomly select single candidate from list of candiadtes with the least votes.
             var potentialEliminationCandidateKeysArray = [];
@@ -158,19 +156,25 @@ angular.module('stvApp')
         };
 
         /**
-        * @desc remove candidate which has been flagged for election.
+        * @desc remove candidate(s) from this candidatesArray which are flagged as elected.
         */
-        this.removeElectedCandidate = function() {
-            var electedCandidateIndex = -1;
-            angular.forEach(this.candidatesArray, ( function(thisCandidate, index) {
-                if (thisCandidate.elected === true) {
-                  electedCandidateIndex = index;
-                }
-            }).bind(this)); 
+        this.removeElectedCandidates = function( ) {
 
-            if (electedCandidateIndex >= 0) {
-              this.candidatesArray.splice(electedCandidateIndex, 1);
-            }
+          // Remove candiadtes which are flagged as elected.
+          // I couldn't find any high level functional way of doing this - hence, use of do/while with nested for...loop with break syntax.
+          // todo: research high level constructs for this functionality.
+            var removedCandidateThisIteration = false;
+            do {
+              removedCandidateThisIteration = false;
+              for ( var candidatesArrayIndex = 0; candidatesArrayIndex < this.candidatesArray.length; candidatesArrayIndex++) {
+                if ( this.candidatesArray[candidatesArrayIndex].elected ===  true) {
+                  //console.log('Remove candidate ' + this.candidatesArray[candidatesArrayIndex].firstName + ' ' + this.candidatesArray[candidatesArrayIndex].lastName);
+                  this.candidatesArray.splice( candidatesArrayIndex, 1);
+                  removedCandidateThisIteration = true;
+                  break;
+                }
+              }
+            } while( removedCandidateThisIteration === true);
         };
     
         /**

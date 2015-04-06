@@ -164,13 +164,16 @@ angular.module('stvApp')
       var thisVotingRound = this.voteResolutionRounds[this.voteResolutionRounds.length-1];
 
 
-      while ( thisVotingRound !== null) {
+      var roundIndex = 0; //temp safegaurd against infinite loop until elected candiadtes votes are being transferred.
+      while ( thisVotingRound !== null && roundIndex < 3) {
 
         var newVotingRound = thisVotingRound.process( this.getDroopQuota());
 
-        // store elected candidate from round
-        if ( thisVotingRound.electedCandidate !== null) {
-          this.electedCandidatesArray.push( thisVotingRound.electedCandidate);
+        // store elected candidate(s) from this round
+        if ( thisVotingRound.electedCandidates.length > 0) {
+          thisVotingRound.electedCandidates.forEach( function( electedCandidate) {
+            this.electedCandidatesArray.push( electedCandidate);
+          }.bind( this));
         }
 
         // have required number of candidates been elected?
@@ -185,6 +188,8 @@ angular.module('stvApp')
             thisVotingRound = null;
           }
         }
+
+        roundIndex ++; 
       }
 
     };
