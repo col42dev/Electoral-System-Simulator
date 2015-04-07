@@ -154,8 +154,8 @@ angular.module('stvApp')
       var thisVotingRound = this.voteResolutionRounds[this.voteResolutionRounds.length-1];
 
 
-      var roundIndex = 0; //temp safegaurd against infinite loop until elected candiadtes votes are being transferred.
-      while ( thisVotingRound !== null && roundIndex < 3) {
+      var roundIndex = 0; //safegaurd against infinite loop - can test removing this safeguard now that elected candiadtes votes are being transferred.
+      while ( thisVotingRound !== null && roundIndex < 10) {
 
         var newVotingRound = thisVotingRound.process();
 

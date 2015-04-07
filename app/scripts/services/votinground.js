@@ -38,13 +38,11 @@ angular.module('stvApp')
         this.process = function() {
 
           var eliminationVotesToTransfer = [];
+          var electedVotesToTransfer = [];
 
           this.electedCandidates = this.getElectedCandidates( this.getDroopQuota());
           if ( this.electedCandidates.length > 0) {
-              // flag elected candidates
-              angular.forEach( this.electedCandidates, ( function( electedCandidate) { 
-                electedCandidate.elected = true;
-              }).bind( this)); 
+            electedVotesToTransfer = this.processCandidateElection();
           } else {
             // eliminate the candidate(s) with least votes.
             eliminationVotesToTransfer = this.processCandidateEliminaton();
@@ -55,9 +53,12 @@ angular.module('stvApp')
           // create new round.
           var newVotingRound = new VotingRound( this.votePref, this.candidatesArray, this.seatsToFill - this.electedCandidates.length);
 
-          // remove elected/elimiated candidates and transfer their votes.
+          // remove elected/eliminated candidates and transfer their votes.
           if ( this.electedCandidates.length > 0) {
             newVotingRound.removeElectedCandidates();
+            if ( electedVotesToTransfer.length > 0) {
+              newVotingRound.transferElectedCandidateVotes( electedVotesToTransfer); 
+            }
           } else {
             newVotingRound.removeEliminatedCandidate();
             if ( eliminationVotesToTransfer.length > 0) {
@@ -182,12 +183,79 @@ angular.module('stvApp')
         };
 
         /**
+        * @desc processed elected candidates.
+        * @return array of votes to be transferred to other candidates.
+        */
+        this.processCandidateElection = function() {
+
+              // flag elected candidates
+              angular.forEach( this.electedCandidates, ( function( electedCandidate) { 
+                electedCandidate.elected = true;
+              }).bind( this)); 
+
+
+            var droopQuota = this.getDroopQuota();
+
+            // vote transfer
+            var votesToTransfer = [];
+
+            angular.forEach( this.candidatesArray, ( function( thisCandidate) { 
+
+              if ( thisCandidate.elected === true) {
+                this.votePref[0][thisCandidate.key].forEach( function( vote, index)  {
+                    if ( index + 1 > droopQuota) { // surplus votes
+                      console.log('Transferring vote from elected Candidate');
+                      votesToTransfer.push( vote);
+                    }
+                  }.bind(this)
+                );
+              }
+
+            }).bind( this)); 
+
+            return votesToTransfer;
+        };
+
+        /**
+        * @desc transfer votes from elected candidates.
+        */
+        this.transferElectedCandidateVotes = function( votesToTransfer ) {
+
+            votesToTransfer.forEach( function( vote)  {
+                var transferToCandidateKey = vote[1]; // need to handle cases where this candidate is already eliminated or elected.
+                this.votePref[0][transferToCandidateKey].push(vote);
+              }.bind(this)
+            );
+
+          /*
+          var droopQuota = this.getDroopQuota();
+
+          // todo: when multiple candidates are elected in a voting resolution round then the order of transfer processing matters.
+          angular.forEach(this.candidatesArray, ( function( thisCandidate) {
+            if (thisCandidate.elected === true) {
+              console.log('Consider Transferring vote from elected Candidate with key ' + thisCandidate.candidateKey);
+              if ( typeof this.votePref[0][thisCandidate.candidateKey] !== 'undefined') {
+                console.log('!== undefined');
+                this.votePref[0][thisCandidate.candidateKey].forEach( function( vote, index)  {
+                    if ( index > droopQuota) {
+                      console.log('Transferring vote from elected Candidate');
+                      var transferToCandidateKey = vote[1]; // need to handle cases where this candidate is already eliminated or elected.
+                      this.votePref[0][transferToCandidateKey].push( vote);
+                    }
+                  }.bind(this)
+                );
+              }
+            }
+          }).bind(this)); */
+        };
+
+        /**
         * @desc remove candidate(s) from this candidatesArray which are flagged as elected.
         */
         this.removeElectedCandidates = function( ) {
 
-          // Remove candiadtes which are flagged as elected.
-          // I couldn't find any high level functional way of doing this - hence, use of do/while with nested for...loop with break syntax.
+          // Remove candidates which are flagged as elected.
+          // I couldn't find any high level functional way of doing this - hence, use of do/while with nested for...loop and break syntax.
           // todo: research high level constructs for this functionality.
             var removedCandidateThisIteration = false;
             do {
