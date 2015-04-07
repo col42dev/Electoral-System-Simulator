@@ -4,12 +4,12 @@
  * @ngdoc service
  * @name stvApp.Election
  * @description
- * # Election
+ * # ElectionFactory
  * Factory in the stvApp.
  */
 
 angular.module('stvApp')
-.factory('Election', function (Candidate, VotingRound) {
+.factory('ElectionFactory', function (Candidate, VotingRound) {
 
 
   /**
@@ -21,8 +21,6 @@ angular.module('stvApp')
 
 
     this.initialize = function() {
-      console.log('Factory create Election');
-
 
       this.numberOfCandidates = candidateCount;
 

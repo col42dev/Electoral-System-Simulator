@@ -25,13 +25,9 @@ angular
         templateUrl: 'views/main.html',
         controller: 'MainCtrl'
       })
-      .when('/about', {
-        templateUrl: 'views/about.html',
-        controller: 'AboutCtrl'
-      })
       .when('/elect', {
-        templateUrl: 'views/elect.html',
-        controller: 'ElectCtrl'
+        templateUrl: 'views/election setup.html',
+        controller: 'ElectionSetupCtrl'
       })
       .when('/results', {
         templateUrl: 'views/election results.html',

@@ -1,0 +1,20 @@
+<h3>Electoral System Simulator.</h3>
+
+Chose values for the inputs then hit the execute button to run the election. Candidates and votes will be generated randomly based off the input values, the results will be calculated using the single transferable vote system and displayed below. 
+
+	<h4>Inputs</h4> 
+	<ul style="list-style-type:none">
+		<li>
+			<p>Input the number of candidates who will stand at this election. All candidates are considered independent, party affiliations are not simulated. <input ng-model="numberOfCandidates" type="number"  min="2" max="20"> </p>
+		<li>
+			<p>Input the number of seats to be filled in this election.<input ng-model="seatsToFill" type="number" min="1" max="20"></p>
+		<li>
+			<p>Select the number of votes to cast.<input ng-model="voteCount" type="number" min="1" max="20"></p>
+	</ul>
+
+	<button ng-click="navigateToResults()">Run Election</button>
+
+
+	
+
+
