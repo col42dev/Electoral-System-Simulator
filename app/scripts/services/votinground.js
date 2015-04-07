@@ -4,8 +4,12 @@
  * @ngdoc service
  * @name stvApp.VotingRound
  * @description
- * # VotingRound
+ * # VotingRound - voting resolution round in STV. 
+ * When using Wright's method of surplus vote allocation, each voting resolution round can be condsidered
+ * as a new election (with updated inputs).
+ * Ref: http://en.wikipedia.org/wiki/Counting_single_transferable_votes
  * Factory in the stvApp.
+ * ToDo: rename this factory to VotingResolutionRound.
  */
 angular.module('stvApp')
   .factory('VotingRound', function () {
@@ -25,7 +29,6 @@ angular.module('stvApp')
           this.candidatesArray = [];
           angular.copy( thisCandidatesArray, this.candidatesArray);
 
-          
           this.electedCandidates = []; // candidates elected during this round.
 
           this.seatsToFill = thisSeatsToFill;
@@ -44,16 +47,13 @@ angular.module('stvApp')
           if ( this.electedCandidates.length > 0) {
             electedVotesToTransfer = this.processCandidateElection();
           } else {
-            // eliminate the candidate(s) with least votes.
             eliminationVotesToTransfer = this.processCandidateEliminaton();
           }
-
-          console.log('>>>>>>>>NEXT ROUND');
 
           // create new round.
           var newVotingRound = new VotingRound( this.votePref, this.candidatesArray, this.seatsToFill - this.electedCandidates.length);
 
-          // remove elected/eliminated candidates and transfer their votes.
+          // remove elected/eliminated candidates and transfer their votes to seconday preferred candidates.
           if ( this.electedCandidates.length > 0) {
             newVotingRound.removeElectedCandidates();
             if ( electedVotesToTransfer.length > 0) {
@@ -111,7 +111,6 @@ angular.module('stvApp')
 
         /**
         * @desc determine candidate to be eliminted.
-        * @param candidates for this round.
         * @return array of votes to be transferred to other candidates,
         */
         this.processCandidateEliminaton = function() {
@@ -142,7 +141,6 @@ angular.module('stvApp')
                 }
             }).bind(this)); 
 
-
             // vote transfer
             var votesToTransfer = [];
             this.votePref[0][eliminatedCandidateKey].forEach( function( vote)  {
@@ -167,6 +165,17 @@ angular.module('stvApp')
         };
 
         /**
+        * @desc transfer votes from elected candidates.
+        */
+        this.transferElectedCandidateVotes = function( votesToTransfer ) {
+            votesToTransfer.forEach( function( vote)  {
+                var transferToCandidateKey = vote[1]; // need to handle cases where this candidate is already eliminated or elected.
+                this.votePref[0][transferToCandidateKey].push(vote);
+              }.bind(this)
+            );
+        };
+
+        /**
         * @desc remove candidate which has been flagged for elimination.
         */
         this.removeEliminatedCandidate = function() {
@@ -183,16 +192,15 @@ angular.module('stvApp')
         };
 
         /**
-        * @desc processed elected candidates.
-        * @return array of votes to be transferred to other candidates.
+        * @desc processed elected candidate(s).
+        * @return array of votes to be transferred to other preferred candidates.
         */
         this.processCandidateElection = function() {
 
-              // flag elected candidates
-              angular.forEach( this.electedCandidates, ( function( electedCandidate) { 
-                electedCandidate.elected = true;
-              }).bind( this)); 
-
+            // flag elected candidates
+            angular.forEach( this.electedCandidates, ( function( electedCandidate) { 
+              electedCandidate.elected = true;
+            }).bind( this)); 
 
             var droopQuota = this.getDroopQuota();
 
@@ -200,53 +208,17 @@ angular.module('stvApp')
             var votesToTransfer = [];
 
             angular.forEach( this.candidatesArray, ( function( thisCandidate) { 
-
               if ( thisCandidate.elected === true) {
                 this.votePref[0][thisCandidate.key].forEach( function( vote, index)  {
                     if ( index + 1 > droopQuota) { // surplus votes
-                      console.log('Transferring vote from elected Candidate');
                       votesToTransfer.push( vote);
                     }
                   }.bind(this)
                 );
               }
-
             }).bind( this)); 
 
             return votesToTransfer;
-        };
-
-        /**
-        * @desc transfer votes from elected candidates.
-        */
-        this.transferElectedCandidateVotes = function( votesToTransfer ) {
-
-            votesToTransfer.forEach( function( vote)  {
-                var transferToCandidateKey = vote[1]; // need to handle cases where this candidate is already eliminated or elected.
-                this.votePref[0][transferToCandidateKey].push(vote);
-              }.bind(this)
-            );
-
-          /*
-          var droopQuota = this.getDroopQuota();
-
-          // todo: when multiple candidates are elected in a voting resolution round then the order of transfer processing matters.
-          angular.forEach(this.candidatesArray, ( function( thisCandidate) {
-            if (thisCandidate.elected === true) {
-              console.log('Consider Transferring vote from elected Candidate with key ' + thisCandidate.candidateKey);
-              if ( typeof this.votePref[0][thisCandidate.candidateKey] !== 'undefined') {
-                console.log('!== undefined');
-                this.votePref[0][thisCandidate.candidateKey].forEach( function( vote, index)  {
-                    if ( index > droopQuota) {
-                      console.log('Transferring vote from elected Candidate');
-                      var transferToCandidateKey = vote[1]; // need to handle cases where this candidate is already eliminated or elected.
-                      this.votePref[0][transferToCandidateKey].push( vote);
-                    }
-                  }.bind(this)
-                );
-              }
-            }
-          }).bind(this)); */
         };
 
         /**
