@@ -1,0 +1,119 @@
+<h3>Results</h3>
+
+	<h4>Inputs</h4> 
+	<ul style="list-style-type:none">
+		<li>
+			<p>Input the number of candidates who will stand at this election. All candidates are considered independent, party affiliations are not simulated. {{election.numberOfCandidates}}</p>
+		<li>
+			<p>Input the number of seats to be filled in this election. {{election.seatsToFill}}</p>
+		<li>
+			<p>Select the number of votes to cast. {{election.voteCount}}</p>
+	</ul>
+
+
+	<h4>Candidates</h4> 
+	<ul style="list-style-type:none">
+		<li>
+			<table class="table table-bordered">
+				<tr ng-repeat="item in election.candidatesArray">
+					<td> {{item.firstName}} {{item.lastName}}</td> 
+				</tr>
+			</table>
+			</br>
+	</ul>
+
+	<h4>Votes:</h4>
+	<ul style="list-style-type:none">
+		<li>
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th></th> 
+						<th ng-repeat="votePrefIndex in election.candidatesArray">Preference {{$index+1}}</th>
+					</tr>
+			    </thead>
+    			<tbody>
+					<tr ng-repeat="vote in election.votesArray">
+						<td> Vote #{{$index+1}}</td> 
+						<td style="text-align:center;" ng-repeat="candidateKey in vote">{{election.getCandidate(candidateKey).firstName}} {{election.getCandidate(candidateKey).lastName}}
+					</tr>
+				</tbody>
+			</table>
+			</br>   
+	</ul>
+
+	<h4>Votes Table:</h4>
+	<ul style="list-style-type:none">
+		<li>
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>Candidates</th> 
+						<th ng-repeat="votePrefIndex in election.candidatesArray">Preference {{$index+1}}</th>
+					</tr>
+				</thead>
+    			<tbody>
+					<tr ng-repeat="candidate in election.candidatesArray">
+						<td> {{candidate.firstName}} {{candidate.lastName}}</td> 
+						<td style="text-align:center;" ng-repeat="votePrefIndex in election.candidatesArray">{{election.votePref[$index][candidate.key].length}}</td>
+					</tr>
+				<tbody>
+			</table>
+			</br>
+	</ul>
+	</br>
+
+	<h4>Rounds:</h4>
+
+	<div ng-repeat="votingRound in election.voteResolutionRounds">
+		<ul style="list-style-type:none">
+			<li>
+				<p> Round {{$index+1}} </p>
+				<table class="table table-bordered">
+					<thead>
+						<tr>
+							<th>Candidates</th> 
+							<!--th ng-repeat="votePrefIndex in votingRound.candidatesArray">Preference {{$index+1}}</th-->
+							<th>First Preference</th>
+							<th>Elected</th>
+							<th>Eliminated</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="candidate in votingRound.candidatesArray">
+							<td> {{candidate.firstName}} {{candidate.lastName}}</td> 
+							<!--td style="text-align:center;" ng-repeat="votePrefIndex in votingRound.candidatesArray"> {{votingRound.votePref[$index][candidate.key].length}} </td-->
+							<td style="text-align:center;">{{votingRound.votePref[0][candidate.key].length}} </td>
+							<td style="text-align:center;">{{ votingRound.showElected( candidate.key) }} </td>
+							<td style="text-align:center;">{{ votingRound.showEliminated( candidate.key) }} </td>
+						</tr>
+					</tbody>
+				</table>
+
+			<li>	<p>Quota = ((votes cast / (seats to fill + 1)) + 1 = ( ({{votingRound.getVoteCount()}} / ( {{votingRound.seatsToFill}} + 1)) + 1 = {{votingRound.getDroopQuota()}}</p>
+   
+		</ul>
+		</br>
+	</div>
+	</br>
+
+	<h4>Elected Candidates</h4> 
+	<ul style="list-style-type:none">
+	<li>
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th>Candidates</th> 
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="item in election.electedCandidatesArray">
+					<td> {{item.firstName}} {{item.lastName}}</td> 
+				</tr>
+			</tbody>
+		</table>
+		</br>
+	</ul>
+	
+
+

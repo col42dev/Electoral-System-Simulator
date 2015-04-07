@@ -33,6 +33,10 @@ angular
         templateUrl: 'views/elect.html',
         controller: 'ElectCtrl'
       })
+      .when('/results', {
+        templateUrl: 'views/election results.html',
+        controller: 'ElectionResultsCtrl'
+      })
       .otherwise({
         redirectTo: '/'
       });

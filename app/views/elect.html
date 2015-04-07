@@ -5,102 +5,16 @@ Chose values for the inputs then hit the execute button to run the election. Can
 	<h4>Inputs</h4> 
 	<ul style="list-style-type:none">
 		<li>
-			<p>Input the number of candidates who will stand at this election. All candidates are considered independent, party affiliations are not simulated. <input ng-model="election.numberOfCandidates" type="number" ng-change="onParamaterChanged()" min="2" max="20"> </p>
+			<p>Input the number of candidates who will stand at this election. All candidates are considered independent, party affiliations are not simulated. <input ng-model="numberOfCandidates" type="number" ng-change="onParamaterChanged()" min="2" max="20"> </p>
 		<li>
-			<p>Input the number of seats to be filled in this election.<input ng-model="election.seatsToFill" type="number" ng-change="onParamaterChanged()" min="1" max="20"></p>
+			<p>Input the number of seats to be filled in this election.<input ng-model="seatsToFill" type="number" ng-change="onParamaterChanged()" min="1" max="20"></p>
 		<li>
-			<p>Select the number of votes to cast.<input ng-model="election.voteCount" type="number" ng-change="onParamaterChanged()" min="1" max="20"></p>
+			<p>Select the number of votes to cast.<input ng-model="voteCount" type="number" ng-change="onParamaterChanged()" min="1" max="20"></p>
 	</ul>
 
+	<button ng-click="navigateToResults()">Run Election</button>
 
-	<h4>Candidates</h4> 
-	<ul style="list-style-type:none">
-		<li>
-			<table cellpadding="10" border="1">
-				<tr>
-					<th>Candidates</th> 
-				</tr>
-				<tr ng-repeat="item in election.candidatesArray">
-					<td> {{item.firstName}} {{item.lastName}}</td> 
-				</tr>
-			</table>
-			</br>
-	</ul>
 
-	<h4>Votes:</h4>
-	<ul style="list-style-type:none">
-		<li>
-			<table cellpadding="10" border="1">
-				<tr>
-					<th></th> 
-					<th ng-repeat="votePrefIndex in election.candidatesArray">Preference {{$index+1}}</th>
-				</tr>
-				<tr ng-repeat="vote in election.votesArray">
-					<td> Voter {{$index+1}}</td> 
-					<td style="text-align:center;" ng-repeat="candidateKey in vote">{{election.getCandidate(candidateKey).firstName}} {{election.getCandidate(candidateKey).lastName}}
-				</tr>
-			</table>
-			</br>   
-	</ul>
-
-	<h4>Votes Table:</h4>
-	<ul style="list-style-type:none">
-		<li>
-			<table cellpadding="10" border="1">
-				<tr>
-					<th>Candidates</th> 
-					<th ng-repeat="votePrefIndex in election.candidatesArray">Preference {{$index+1}}</th>
-				</tr>
-				<tr ng-repeat="candidate in election.candidatesArray">
-					<td> {{candidate.firstName}} {{candidate.lastName}}</td> 
-					<td style="text-align:center;" ng-repeat="votePrefIndex in election.candidatesArray">{{election.votePref[$index][candidate.key].length}}</td>
-				</tr>
-			</table>
-			</br>
-	</ul>
-	</br>
-
-	<h4>Rounds:</h4>
-
-	<div ng-repeat="votingRound in election.voteResolutionRounds">
-		<ul style="list-style-type:none">
-			<li>
-				<p> Round {{$index+1}} </p>
-				<table cellpadding="10" border="1">
-					<tr>
-						<th>Candidates</th> 
-						<th ng-repeat="votePrefIndex in votingRound.candidatesArray">Preference {{$index+1}}</th>
-						<th>Elected</th>
-						<th>Eliminated</th>
-					</tr>
-					<tr ng-repeat="candidate in votingRound.candidatesArray">
-						<td> {{candidate.firstName}} {{candidate.lastName}}</td> 
-						<td style="text-align:center;" ng-repeat="votePrefIndex in votingRound.candidatesArray"> {{votingRound.votePref[$index][candidate.key].length}} </td>
-						<td style="text-align:center;">{{ votingRound.showElected( candidate.key) }} </td>
-						<td style="text-align:center;">{{ votingRound.showEliminated( candidate.key) }} </td>
-					</tr>
-				</table>
-
-			<li>	<p>Quota = ((votes cast / (seats to fill + 1)) + 1 = ( ({{votingRound.getVoteCount()}} / ( {{votingRound.seatsToFill}} + 1)) + 1 = {{votingRound.getDroopQuota()}}</p>
-   
-		</ul>
-		</br>
-	</div>
-	</br>
-
-	<h4>Elected Candidates</h4> 
-	<ul style="list-style-type:none">
-	<li>
-		<table cellpadding="10" border="1">
-			<tr>
-				<th>Candidates</th> 
-			</tr>
-			<tr ng-repeat="item in election.electedCandidatesArray">
-				<td> {{item.firstName}} {{item.lastName}}</td> 
-			</tr>
-		</table>
-		</br>
-	</ul>
 	
 
 

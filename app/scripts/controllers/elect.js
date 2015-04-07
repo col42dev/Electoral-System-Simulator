@@ -8,13 +8,22 @@
  * Controller of the stvApp
  */
 angular.module('stvApp')
-  .controller('ElectCtrl', function ($scope, Election) {
+  .controller('ElectCtrl',['$scope', 'ElectionService', '$location', function ($scope, ElectionService, $location) {
   
-    $scope.election = new Election(3, 2, 5);
+    //$scope.election = new Election(3, 2, 5);
+
+    $scope.numberOfCandidates = 3;
+    $scope.seatsToFill = 2;
+    $scope.voteCount = 5;
 
 
     $scope.onParamaterChanged = function() {
-      $scope.election = new Election($scope.election.numberOfCandidates, $scope.election.seatsToFill, $scope.election.voteCount);
     };
 
-  });
+    $scope.navigateToResults = function ( ) {
+      ElectionService.createElection($scope.numberOfCandidates, $scope.seatsToFill, $scope.voteCount);
+      $location.path( 'results' );
+      console.log('ff');
+    };
+
+  }]);
