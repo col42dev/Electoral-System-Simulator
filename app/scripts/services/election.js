@@ -60,7 +60,6 @@ angular.module('stvApp')
 
       this.voteCount = votesCount; 
       this.seatsToFill = seatsToFillCount;
-      this.droopQuota = 0;
 
       // place votes
       this.runElection();
@@ -81,15 +80,6 @@ angular.module('stvApp')
       return candidateWithKey;
     };
 
-    /**
-    * @desc droop Quota - number of votes required by candidate to be elected.
-    * @return integer value quota
-    */
-    this.getDroopQuota = function() {
-      var dq = (this.votesArray.length / (parseInt( this.seatsToFill) + 1)) + 1;
-      var dq_ = Math.floor( dq);
-      return dq_;
-    };
 
 
     /**
@@ -159,7 +149,7 @@ angular.module('stvApp')
     this.processVoteResolution = function() {
 
       this.voteResolutionRounds = [];
-      this.voteResolutionRounds.push( new VotingRound( this.votePref, this.candidatesArray ) );
+      this.voteResolutionRounds.push( new VotingRound( this.votePref, this.candidatesArray, this.seatsToFill ) );
 
       var thisVotingRound = this.voteResolutionRounds[this.voteResolutionRounds.length-1];
 
@@ -167,9 +157,9 @@ angular.module('stvApp')
       var roundIndex = 0; //temp safegaurd against infinite loop until elected candiadtes votes are being transferred.
       while ( thisVotingRound !== null && roundIndex < 3) {
 
-        var newVotingRound = thisVotingRound.process( this.getDroopQuota());
+        var newVotingRound = thisVotingRound.process();
 
-        // store elected candidate(s) from this round
+        // append elected candidate(s) from this round to store
         if ( thisVotingRound.electedCandidates.length > 0) {
           thisVotingRound.electedCandidates.forEach( function( electedCandidate) {
             this.electedCandidatesArray.push( electedCandidate);

@@ -15,16 +15,16 @@ Chose values for the inputs then hit the execute button to run the election. Can
 
 	<h4>Candidates</h4> 
 	<ul style="list-style-type:none">
-	<li>
-		<table cellpadding="10" border="1">
-			<tr>
-				<th>Candidates</th> 
-			</tr>
-			<tr ng-repeat="item in election.candidatesArray">
-				<td> {{item.firstName}} {{item.lastName}}</td> 
-			</tr>
-		</table>
-		</br>
+		<li>
+			<table cellpadding="10" border="1">
+				<tr>
+					<th>Candidates</th> 
+				</tr>
+				<tr ng-repeat="item in election.candidatesArray">
+					<td> {{item.firstName}} {{item.lastName}}</td> 
+				</tr>
+			</table>
+			</br>
 	</ul>
 
 	<h4>Votes:</h4>
@@ -57,12 +57,8 @@ Chose values for the inputs then hit the execute button to run the election. Can
 				</tr>
 			</table>
 			</br>
-
-		<li>	<p>Quota = ((votes cast / (seats to fill + 1)) + 1 = ( ({{election.voteCount}} / ( {{election.seatsToFill}} + 1)) + 1 = {{election.getDroopQuota()}}</p>
-   
 	</ul>
-
-	 </br>
+	</br>
 
 	<h4>Rounds:</h4>
 
@@ -84,6 +80,9 @@ Chose values for the inputs then hit the execute button to run the election. Can
 						<td style="text-align:center;">{{ votingRound.showEliminated( candidate.key) }} </td>
 					</tr>
 				</table>
+
+			<li>	<p>Quota = ((votes cast / (seats to fill + 1)) + 1 = ( ({{votingRound.getVoteCount()}} / ( {{votingRound.seatsToFill}} + 1)) + 1 = {{votingRound.getDroopQuota()}}</p>
+   
 		</ul>
 		</br>
 	</div>

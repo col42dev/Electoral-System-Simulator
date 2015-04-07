@@ -12,7 +12,7 @@ angular.module('stvApp')
     // Service logic
     // ...
 
-    var VotingRound = function( thisVotePref, thisCandidatesArray) {
+    var VotingRound = function( thisVotePref, thisCandidatesArray, thisSeatsToFill) {
         // Public properties, assigned to the instance ('this')
 
         this.initialize = function(thisVotePref, thisCandidatesArray) {
@@ -27,17 +27,19 @@ angular.module('stvApp')
 
           
           this.electedCandidates = []; // candidates elected during this round.
+
+          this.seatsToFill = thisSeatsToFill;
         };
 
         /**
         * @desc voting round resolution
         * @param droopQuota
         */
-        this.process = function( droopQuota) {
+        this.process = function() {
 
           var eliminationVotesToTransfer = [];
 
-          this.electedCandidates = this.getElectedCandidates( droopQuota);
+          this.electedCandidates = this.getElectedCandidates( this.getDroopQuota());
           if ( this.electedCandidates.length > 0) {
               // flag elected candidates
               angular.forEach( this.electedCandidates, ( function( electedCandidate) { 
@@ -51,7 +53,7 @@ angular.module('stvApp')
           console.log('>>>>>>>>NEXT ROUND');
 
           // create new round.
-          var newVotingRound = new VotingRound( this.votePref, this.candidatesArray);
+          var newVotingRound = new VotingRound( this.votePref, this.candidatesArray, this.seatsToFill - this.electedCandidates.length);
 
           // remove elected/elimiated candidates and transfer their votes.
           if ( this.electedCandidates.length > 0) {
@@ -80,6 +82,30 @@ angular.module('stvApp')
           }.bind(this)); 
 
           return electedCandidates;
+        };
+
+        /**
+        * @desc droop Quota - number of votes required by candidate to be elected.
+        * @return integer value quota
+        */
+        this.getDroopQuota = function() {
+          var dq = (this.getVoteCount() / (parseInt( this.seatsToFill) + 1)) + 1;
+          var dq_ = Math.floor( dq);
+          return dq_;
+        };
+
+        /**
+        * @desc vote Count -
+        * @return integer value for votes cast in this round.
+        */
+        this.getVoteCount = function() {
+
+            var voteCount = 0;
+            angular.forEach(this.candidatesArray, ( function(thisCandidate) {
+                voteCount += this.votePref[0][thisCandidate.key].length;
+            }).bind(this)); 
+
+            return voteCount;
         };
 
         /**
