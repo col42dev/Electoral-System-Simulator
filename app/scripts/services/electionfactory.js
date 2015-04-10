@@ -46,7 +46,7 @@ angular.module('stvApp')
           candidates.push( candidate );
         }
 
-        return ( candidates );
+        return candidates;
       }
 
       this.electedCandidatesArray = [];    
