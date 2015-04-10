@@ -10,9 +10,9 @@
 angular.module('stvApp')
   .controller('ElectionSetupCtrl',['$scope', 'ElectionService', '$location', function ($scope, ElectionService, $location) {
 
-    $scope.numberOfCandidates = 3;
-    $scope.seatsToFill = 2;
-    $scope.voteCount = 5;
+    $scope.numberOfCandidates = 8;
+    $scope.seatsToFill = 4;
+    $scope.voteCount = 10;
 
 
     $scope.navigateToResults = function ( ) {

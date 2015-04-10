@@ -32,10 +32,12 @@ angular.module('stvApp')
           this.electedCandidates = []; // candidates elected during this round.
 
           this.seatsToFill = thisSeatsToFill;
+
+          this.roundDesc = []; // holds textual description of the process for this round.
         };
 
         /**
-        * @desc voting round resolution
+        * @desc voting round resolution.
         * @param droopQuota
         */
         this.process = function() {
@@ -43,25 +45,36 @@ angular.module('stvApp')
           var eliminationVotesToTransfer = [];
           var electedVotesToTransfer = [];
 
+          this.roundDesc.push('The Droop quota for this round is ' + this.getDroopQuota()); 
           this.electedCandidates = this.getElectedCandidates( this.getDroopQuota());
           if ( this.electedCandidates.length > 0) {
+            this.roundDesc.push(this.electedCandidates.length  + ' candidate(s) elected.');
             electedVotesToTransfer = this.processCandidateElection();
           } else {
             eliminationVotesToTransfer = this.processCandidateEliminaton();
+
+            // log desc eliminated candidate
+            angular.forEach(this.candidatesArray, ( function( thisCandidate) {
+              if (thisCandidate.eliminated === true) {
+                this.roundDesc.push( 'Candidate ' + thisCandidate.getFullName() + ' is eliminated this round.');
+              }
+            }).bind(this)); 
           }
 
           // create new round.
           var newVotingRound = new VotingRound( this.votePref, this.candidatesArray, this.seatsToFill - this.electedCandidates.length);
 
-          // remove elected/eliminated candidates and transfer their votes to seconday preferred candidates.
+          // remove elected/eliminated candidates and transfer their votes to secondary preferred candidates.
           if ( this.electedCandidates.length > 0) {
             newVotingRound.removeElectedCandidates();
             if ( electedVotesToTransfer.length > 0) {
+              this.roundDesc.push(electedVotesToTransfer.length + ' votes(s) are transfered from the elected candidate(s) this round.');
               newVotingRound.transferElectedCandidateVotes( electedVotesToTransfer); 
             }
           } else {
             newVotingRound.removeEliminatedCandidate();
             if ( eliminationVotesToTransfer.length > 0) {
+              this.roundDesc.push(eliminationVotesToTransfer.length + ' votes(s) are transfered from the eliminated candidate this round.');
               newVotingRound.transferEliminationVotes( eliminationVotesToTransfer);
             }
           }
