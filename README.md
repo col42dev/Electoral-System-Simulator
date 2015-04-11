@@ -4,7 +4,7 @@ Web application for simululating elections using various electorial systems. It 
 
 ## Systems
 
-### Standard Transferable Vote
+### Standard Transferable Vote.
 
 This is a form of proportional voting which is typically used for elections where there are multiple seats to be allocated. In the simulator you setup the conditions for the election - the number of candidates, the number of seats up for election and the number of votes to be cast. The simulator will randomly generate the set of votes based of these inputs, then it processes and displays each of the voting resolution rounds which STV uses to determine the elected candidates. At each resolution round candidates may be eliminated or elected, it ends once the required number of candidates have been elected.
 
